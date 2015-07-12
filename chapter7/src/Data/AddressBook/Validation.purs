@@ -1,5 +1,7 @@
 module Data.AddressBook.Validation where
 
+import Prelude
+
 import Data.Array
 import Data.Either
 import Data.Validation
@@ -11,17 +13,17 @@ import qualified Data.String.Regex as R
 
 import Control.Apply
 
-type Errors = [String]
+type Errors = Array String
 
 nonEmpty :: String -> String -> V Errors Unit
 nonEmpty field "" = invalid ["Field '" ++ field ++ "' cannot be empty"]
 nonEmpty _     _  = pure unit
 
-arrayNonEmpty :: forall a. String -> [a] -> V Errors Unit
+arrayNonEmpty :: forall a. String -> Array a -> V Errors Unit
 arrayNonEmpty field [] = invalid ["Field '" ++ field ++ "' must contain at least one value"]
 arrayNonEmpty _     _  = pure unit
 
-lengthIs :: String -> Number -> String -> V Errors Unit
+lengthIs :: String -> Int -> String -> V Errors Unit
 lengthIs field len value | S.length value /= len = invalid ["Field '" ++ field ++ "' must have length " ++ show len]
 lengthIs _     _   _     = pure unit
 

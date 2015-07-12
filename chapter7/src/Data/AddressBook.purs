@@ -1,5 +1,7 @@
 module Data.AddressBook where
 
+import Prelude
+
 newtype Address = Address 
   { street :: String
   , city   :: String 
@@ -34,10 +36,10 @@ newtype Person = Person
   { firstName :: String
   , lastName  :: String
   , address   :: Address
-  , phones    :: [PhoneNumber]
+  , phones    :: Array PhoneNumber
   }
 
-person :: String -> String -> Address -> [PhoneNumber] -> Person
+person :: String -> String -> Address -> Array PhoneNumber -> Person
 person firstName lastName address phones = Person
   { firstName: firstName
   , lastName:  lastName
