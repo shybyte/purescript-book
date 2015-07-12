@@ -1,12 +1,14 @@
 module FileOperations where
 
-import Data.Path
-import Data.Array
+import Prelude
 
-allFiles :: Path -> [Path]
+import Data.Path
+import Data.List
+
+allFiles :: Path -> List Path
 allFiles root = root : concatMap allFiles (ls root)
 
-allFiles' :: Path -> [Path]
+allFiles' :: Path -> List Path
 allFiles' file = file : do
   child <- ls file
   allFiles' child
