@@ -1,5 +1,7 @@
 module Data.PhoneBook where
 
+import Prelude
+
 import Data.List
 import Data.Maybe
 
