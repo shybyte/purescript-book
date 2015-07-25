@@ -1,20 +1,22 @@
 module Data.AddressBook.UI where
 
+import Prelude
+
+import DOM
+
 import Data.Maybe
 import Data.Either
 import Data.Foreign
 import Data.Foreign.Class
 import Data.AddressBook
 import Data.AddressBook.Validation
-
-import Data.Traversable
+import Data.Traversable (sequence)
 
 import Control.Bind
 
 import Control.Monad.Eff
 import Control.Monad.Eff.DOM
-
-import Debug.Trace
+import Control.Monad.Eff.Console
 
 valueOf :: forall eff. String -> Eff (dom :: DOM | eff) String
 valueOf sel = do
@@ -27,7 +29,7 @@ valueOf sel = do
         Right s -> s
         _ -> ""
 
-displayValidationErrors :: forall eff. [String] -> Eff (dom :: DOM | eff) Unit
+displayValidationErrors :: forall eff. Array String -> Eff (dom :: DOM | eff) Unit
 displayValidationErrors errs = do
   alert <- createElement "div"
     >>= addClass "alert"
@@ -46,9 +48,9 @@ displayValidationErrors errs = do
 
   return unit
 
-validateControls :: forall eff. Eff (trace :: Trace, dom :: DOM | eff) (Either [String] Person)
+validateControls :: forall eff. Eff (console :: CONSOLE, dom :: DOM | eff) (Either (Array String) Person)
 validateControls = do
-  trace "Running validators"
+  log "Running validators"
 
   p <- person <$> valueOf "#inputFirstName"
               <*> valueOf "#inputLastName"
@@ -61,7 +63,7 @@ validateControls = do
 
   return $ validatePerson' p
 
-validateAndUpdateUI :: forall eff. Eff (trace :: Trace, dom :: DOM | eff) Unit
+validateAndUpdateUI :: forall eff. Eff (console :: CONSOLE, dom :: DOM | eff) Unit
 validateAndUpdateUI = do
   Just validationErrors <- querySelector "#validationErrors"
   setInnerHTML "" validationErrors
@@ -74,7 +76,7 @@ validateAndUpdateUI = do
 
   return unit
 
-setupEventHandlers :: forall eff. Eff (trace :: Trace, dom :: DOM | eff) Unit
+setupEventHandlers :: forall eff. Eff (console :: CONSOLE, dom :: DOM | eff) Unit
 setupEventHandlers = do
   -- Listen for changes on form fields
   body >>= addEventListener "change" validateAndUpdateUI
