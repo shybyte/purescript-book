@@ -1,18 +1,22 @@
-module Main where
+module Example.Rectangle where
+
+import Prelude
+
+import Data.Maybe
 
 import Control.Monad.Eff
 
 import Graphics.Canvas hiding (translate)
 
 main = do
-  canvas <- getCanvasElementById "canvas"
+  Just canvas <- getCanvasElementById "canvas"
   ctx <- getContext2D canvas
 
   setFillStyle "#0000FF" ctx
 
   fillPath ctx $ rect ctx 
-    { x: 250
-    , y: 250
-    , w: 100
-    , h: 100
+    { x: 250.0
+    , y: 250.0
+    , w: 100.0
+    , h: 100.0
     }

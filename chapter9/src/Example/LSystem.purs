@@ -1,17 +1,19 @@
-module Main where
+module Example.LSystem where
 
-import Data.Array (concatMap)
+import Prelude
 
-import Control.Monad (foldM)
+import Data.Maybe
+import Data.Array (concatMap, foldM)
+
 import Control.Monad.Eff
 
 import Graphics.Canvas hiding (translate)
 
 lsystem :: forall a m s. (Monad m) =>
-                         [a] ->
-                         (a -> [a]) ->
+                         Array a ->
+                         (a -> Array a) ->
                          (s -> a -> m s) ->
-                         Number ->
+                         Int ->
                          s -> m s
 lsystem init prod interpret n state = go init n
   where
@@ -20,7 +22,7 @@ lsystem init prod interpret n state = go init n
 
 data Alphabet = L | R | F
 
-type Sentence = [Alphabet]
+type Sentence = Array Alphabet
 
 type State =
   { x :: Number
@@ -29,7 +31,7 @@ type State =
   }
 
 main = do
-  canvas <- getCanvasElementById "canvas"
+  Just canvas <- getCanvasElementById "canvas"
   ctx <- getContext2D canvas
 
   let
@@ -42,8 +44,8 @@ main = do
     productions F = [F, L, F, R, R, F, L, F]
 
     interpret :: State -> Alphabet -> Eff (canvas :: Canvas) State
-    interpret state L = return $ state { theta = state.theta - Math.pi / 3 }
-    interpret state R = return $ state { theta = state.theta + Math.pi / 3 }
+    interpret state L = return $ state { theta = state.theta - Math.pi / 3.0 }
+    interpret state R = return $ state { theta = state.theta + Math.pi / 3.0 }
     interpret state F = do
       let x' = state.x + Math.cos state.theta * 1.5
           y' = state.y + Math.sin state.theta * 1.5
@@ -52,7 +54,7 @@ main = do
       return { x: x', y: y', theta: state.theta }
 
     initialState :: State
-    initialState = { x: 120, y: 200, theta: 0 }
+    initialState = { x: 120.0, y: 200.0, theta: 0.0 }
 
   setStrokeStyle "#000000" ctx
 
