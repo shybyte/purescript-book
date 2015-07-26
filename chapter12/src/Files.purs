@@ -1,5 +1,7 @@
 module Files where
 
+import Prelude
+
 import Data.Either
 import Data.Function
 
@@ -14,38 +16,18 @@ type ErrorCode = String
 
 type FilePath = String
 
-foreign import readFileImpl
-  "function readFileImpl(path, onSuccess, onFailure) {\
-  \  return function() {\
-  \    require('fs').readFile(path, { encoding: 'utf-8' }, function(error, data) {\
-  \      if (error) {\
-  \        onFailure(error.code)();\
-  \      } else {\
-  \        onSuccess(data)();\
-  \      }\
-  \    });\
-  \  };\
-  \}" :: forall eff. Fn3 FilePath 
-                         (String -> Eff (fs :: FS | eff) Unit) 
-                         (ErrorCode -> Eff (fs :: FS | eff) Unit) 
-                         (Eff (fs :: FS | eff) Unit) 
+foreign import readFileImpl :: 
+                 forall eff. Fn3 FilePath 
+                   (String -> Eff (fs :: FS | eff) Unit) 
+                   (ErrorCode -> Eff (fs :: FS | eff) Unit) 
+                   (Eff (fs :: FS | eff) Unit) 
                         
-foreign import writeFileImpl
-  "function writeFileImpl(path, data, onSuccess, onFailure) {\
-  \  return function() {\
-  \    require('fs').writeFile(path, data, { encoding: 'utf-8' }, function(error) {\
-  \      if (error) {\
-  \        onFailure(error.code)();\
-  \      } else {\
-  \        onSuccess();\
-  \      }\
-  \    });\
-  \  };\
-  \}" :: forall eff. Fn4 FilePath
-                         String
-                         (Eff (fs :: FS | eff) Unit) 
-                         (ErrorCode -> Eff (fs :: FS | eff) Unit) 
-                         (Eff (fs :: FS | eff) Unit) 
+foreign import writeFileImpl :: 
+                 forall eff. Fn4 FilePath
+                   String
+                   (Eff (fs :: FS | eff) Unit) 
+                   (ErrorCode -> Eff (fs :: FS | eff) Unit) 
+                   (Eff (fs :: FS | eff) Unit) 
                        
 readFile :: forall eff. FilePath -> (Either ErrorCode String -> Eff (fs :: FS | eff) Unit) -> Eff (fs :: FS | eff) Unit
 readFile path k = runFn3 readFileImpl path (k <<< Right) (k <<< Left)

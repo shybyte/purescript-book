@@ -1,5 +1,8 @@
 module Network.HTTP.Client where
 
+import Prelude
+
+import Data.List
 import Data.Maybe
 import Data.Function
 
@@ -22,7 +25,7 @@ newtype Chunk = Chunk String
 instance showChunk :: Show Chunk where
   show (Chunk s) = "Chunk " ++ show s
 
-newtype Response = Response [Chunk]
+newtype Response = Response (List Chunk)
 
 instance showResponse :: Show Response where
   show (Response cs) = "Response " ++ show cs
@@ -30,34 +33,22 @@ instance showResponse :: Show Response where
 runChunk :: Chunk -> String
 runChunk (Chunk s) = s
 
-type WithHTTP eff = Eff (http :: HTTP | eff)
+type WithHTTP eff = (http :: HTTP | eff)
 
-foreign import getImpl
-  "function getImpl(opts, more, done) {\
-  \  return function() {\
-  \    require('http').request(opts, function(res) {\
-  \      res.setEncoding('utf8');\
-  \      res.on('data', function (s) {\
-  \        more(s)();\
-  \      });\
-  \      res.on('end', function () {\
-  \        done();\
-  \      });\
-  \    }).end();\
-  \  };\
-  \}" :: forall eff. Fn3 Request 
-                         (Chunk -> WithHTTP eff Unit) 
-                         (WithHTTP eff Unit) 
-                         (WithHTTP eff Unit)
+foreign import getImpl :: 
+                 forall eff. Fn3 Request 
+                   (Chunk -> Eff (WithHTTP eff) Unit) 
+                   (Eff (WithHTTP eff) Unit) 
+                   (Eff (WithHTTP eff) Unit)
 
 getChunk :: forall eff. Request -> 
-                        (Maybe Chunk -> WithHTTP eff Unit) -> 
-                        WithHTTP eff Unit
+                        (Maybe Chunk -> Eff (WithHTTP eff) Unit) -> 
+                        Eff (WithHTTP eff) Unit
 getChunk req k = runFn3 getImpl req (k <<< Just) (k Nothing)
 
-getCont :: forall eff. Request -> ContT Unit (WithHTTP eff) (Maybe Chunk)
+getCont :: forall eff. Request -> ContT Unit (Eff (WithHTTP eff)) (Maybe Chunk)
 getCont req = ContT $ getChunk req
  
-getAll :: forall eff. Request -> ContT Unit (WithHTTP (ref :: Ref | eff)) Response
+getAll :: forall eff. Request -> ContT Unit (Eff (WithHTTP (WithRef eff))) Response
 getAll req = Response <$> collect (getCont req)
 
