@@ -1,8 +1,11 @@
 module Split where
 
+import Prelude
+
 import Data.String (take, drop, toUpper, toLower)
 import Data.Either
 import Data.Tuple
+import Data.Identity
 
 import Control.MonadPlus
 import Control.Monad.State
@@ -11,12 +14,11 @@ import Control.Monad.State.Trans
 import Control.Monad.Writer
 import Control.Monad.Writer.Class
 import Control.Monad.Writer.Trans
-import Control.Monad.Error
 import Control.Monad.Error.Class
-import Control.Monad.Error.Trans
-import Control.Monad.Identity
+import Control.Monad.Except
+import Control.Monad.Except.Trans
 
-type Parser = StateT String (WriterT [String] (ErrorT String Identity))
+type Parser = StateT String (WriterT (Array String) (ExceptT String Identity))
 
 split :: Parser String
 split = do
@@ -48,5 +50,5 @@ lower = do
   guard $ toLower s == s
   return s
 
-runParser :: forall a. Parser a -> String -> Either String (Tuple (Tuple a String) [String])
-runParser p s = runIdentity $ runErrorT $ runWriterT $ runStateT p s
+runParser :: forall a. Parser a -> String -> Either String (Tuple (Tuple a String) (Array String))
+runParser p = runExcept <<< runWriterT <<< runStateT p
