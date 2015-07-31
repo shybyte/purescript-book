@@ -3,12 +3,12 @@ module FileOperations where
 import Prelude
 
 import Data.Path
-import Data.List
+import Data.Array
 
-allFiles :: Path -> List Path
+allFiles :: Path -> Array Path
 allFiles root = root : concatMap allFiles (ls root)
 
-allFiles' :: Path -> List Path
+allFiles' :: Path -> Array Path
 allFiles' file = file : do
   child <- ls file
   allFiles' child

@@ -12,8 +12,6 @@ import Prelude
 import Data.Maybe
 import Data.Array
 
-import qualified Data.List as L
-
 data Path 
   = Directory String (Array Path) 
   | File String Int
@@ -55,9 +53,9 @@ isDirectory :: Path -> Boolean
 isDirectory (Directory _ _) = true
 isDirectory _ = false
 
-ls :: Path -> L.List Path
-ls (Directory _ xs) = L.toList xs
-ls _ = L.Nil
+ls :: Path -> Array Path
+ls (Directory _ xs) = xs
+ls _ = []
 
 size :: Path -> Maybe Int
 size (File _ bytes) = Just bytes
