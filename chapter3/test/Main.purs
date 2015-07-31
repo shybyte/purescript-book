@@ -6,20 +6,26 @@ import Control.Monad.Eff
 import Control.Monad.Eff.Console
 
 import Data.Maybe
-import Data.PhoneBook
+import Data.AddressBook
 
 example :: Entry
-example = { firstName: "John", lastName: "Smith", phone: "555-555-5555" }
+example = 
+  { firstName: "John"
+  , lastName: "Smith"
+  , address: { street: "123 Fake St."
+             , city: "Faketown"
+             , state: "CA"
+             }
+  }
      
-book0 :: PhoneBook
+book0 :: AddressBook
 book0 = emptyBook
 
-printEntry :: String -> String -> PhoneBook -> Maybe String
+printEntry :: String -> String -> AddressBook -> Maybe String
 printEntry firstName lastName book = showEntry <$> findEntry firstName lastName book
 
 main = do
-  let john = { firstName: "John", lastName: "Smith", phone: "555-555-5555" }
-      book1 = insertEntry john emptyBook
+  let book1 = insertEntry example emptyBook
 
   print $ printEntry "John" "Smith" book0
   print $ printEntry "John" "Smith" book1
