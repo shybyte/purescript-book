@@ -42,7 +42,7 @@ hashEqual :: forall a. (Hashable a) => a -> a -> Boolean
 hashEqual = eq `on` hash
 
 instance hashChar :: Hashable Char where
-  hash = hashCode <<< toCharCode
+  hash = hash <<< toCharCode
 
 instance hashString :: Hashable String where
   hash = hash <<< toCharArray
