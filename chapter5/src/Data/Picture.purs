@@ -31,8 +31,8 @@ showShape (Text loc text) =
 
 type Picture = Array Shape
 
-showPicture :: Picture -> String
-showPicture picture = show (map showShape picture)
+showPicture :: Picture -> Array String
+showPicture = map showShape
 
 data Bounds = Bounds
   { top    :: Number
