@@ -7,6 +7,8 @@ newtype Address = Address
   , city   :: String 
   , state  :: String
   }
+  
+runAddress (Address s) = s
 
 address :: String -> String -> String -> Address
 address street city state = Address
@@ -25,6 +27,8 @@ newtype PhoneNumber = PhoneNumber
   { "type" :: PhoneType
   , number :: String
   }
+  
+runPhoneNumber (PhoneNumber s) = s
 
 phoneNumber :: PhoneType -> String -> PhoneNumber
 phoneNumber ty number = PhoneNumber
@@ -38,6 +42,8 @@ newtype Person = Person
   , address   :: Address
   , phones    :: Array PhoneNumber
   }
+  
+runPerson (Person s) = s
 
 person :: String -> String -> Address -> Array PhoneNumber -> Person
 person firstName lastName addr phones = Person
