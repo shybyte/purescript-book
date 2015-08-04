@@ -40,10 +40,10 @@ newtype Person = Person
   }
 
 person :: String -> String -> Address -> Array PhoneNumber -> Person
-person firstName lastName address phones = Person
+person firstName lastName addr phones = Person
   { firstName: firstName
   , lastName:  lastName
-  , address:   address
+  , address:   addr
   , phones:    phones
   }
 
