@@ -16,4 +16,10 @@ testFolds = do
 
 main = do
   for_ (allFiles root) print
+  for_ (onlyFiles root) print
+  print $ largestFile root
+  print $ whereIs "/root.txt"
+  print $ whereIs "/bin/ls"
+  print $ whereIs "/bin/cat"
   testFolds
+

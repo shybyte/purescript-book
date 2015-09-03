@@ -43,6 +43,7 @@ root =
                 ]
             ]
         ]
+    , File "/root.txt" 1020
     ]
 
 filename :: Path -> String
