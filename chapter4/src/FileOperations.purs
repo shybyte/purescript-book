@@ -7,6 +7,7 @@ import Data.Array
 import Data.Maybe
 import Data.Maybe.Unsafe
 import Data.Foldable
+import Control.Bind (join)
 
 allFiles :: Path -> Array Path
 allFiles root = root : concatMap allFiles (ls root)
@@ -51,7 +52,7 @@ whereIs fileNameNeedle = whereIs' root
             subfolderResults :: Maybe (Maybe Path)
             subfolderResults = find isJust (map whereIs' (ls directory))
           in
-            fromMaybe Nothing subfolderResults
+            join subfolderResults
       else
         Nothing
 
