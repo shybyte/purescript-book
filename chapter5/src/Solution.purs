@@ -29,3 +29,14 @@ sameCity {address: {city: city1}} {address: {city: city2}} =
 fromSingleton ::forall a. a -> Array a -> a
 fromSingleton _ [x] = x
 fromSingleton defaultValue _ = defaultValue
+
+
+import Data.Array.Unsafe (tail)
+
+
+isTwin :: Array Int -> Boolean
+isTwin xs =
+  case xs of
+    [a,b] | a == b -> true
+          | a /= b -> false
+    _              -> false
