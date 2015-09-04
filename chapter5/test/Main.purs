@@ -30,3 +30,6 @@ main = do
   print $ fromSingleton "default" []
   print $ fromSingleton "default" ["Supi"]
   print $ fromSingleton 0 [1,2]
+  print $ showShape $ scale2 $ Line (Point {x: 10.0, y: 20.0}) (Point {x: 20.0, y: 30.0})
+  print $ getText $ Line (Point {x: 10.0, y: 20.0}) (Point {x: 20.0, y: 30.0})
+  print $ getText $ Text (Point {x: 10.0, y: 20.0}) "Text of Text"

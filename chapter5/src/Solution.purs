@@ -2,6 +2,7 @@ module Solution where
 
 import Prelude
 import Data.Picture
+import Data.Maybe
 
 
 factorial :: Int -> Int
@@ -40,3 +41,28 @@ isTwin xs =
     [a,b] | a == b -> true
           | a /= b -> false
     _              -> false
+
+
+
+centeredCircle = Circle (Point {x: 0.0, y:0.0}) 10.0
+
+
+scale2 :: Shape -> Shape
+scale2 (Circle c r) = Circle c (r/2.0)
+scale2 (Rectangle c w h) = Rectangle c (w/2.0) (h/2.0)
+scale2 (Line (Point{x: x1, y: y1}) (Point{x: x2, y: y2})) =
+  Line ( Point {x: x1', y:y1'}) ( Point {x: x2', y: y2'})
+  where
+    centerX = (x1+x2)/2.0
+    centerY = (y1+y2)/2.0
+    scale2ToCenter z center = (z-center)/2.0 + center
+    x1' = scale2ToCenter x1 centerX
+    x2' = scale2ToCenter x2 centerX
+    y1' = scale2ToCenter y1 centerY
+    y2' = scale2ToCenter y2 centerY
+scale2 text@(Text _ _) = text
+
+
+getText :: Shape -> Maybe String
+getText (Text _ text) = Just text
+getText _ = Nothing
