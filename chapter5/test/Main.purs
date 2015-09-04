@@ -21,3 +21,12 @@ main = do
   print $ binomialCoefficients 5 0
   print $ binomialCoefficients 6 6
   print $ binomialCoefficients 5 3
+  print $ sameCity
+    {address: {city: "Berlin", street: "Bla"}, name: "Marco"}
+    {address: {city: "Jena", street: "Bli"}, name: "Lars"}
+  print $ sameCity
+    {address: {city: "Jena", street: "Blo"}, name: "Lars"}
+    {address: {city: "Jena", street: "Bli"}, name: "Sven"}
+  print $ fromSingleton "default" []
+  print $ fromSingleton "default" ["Supi"]
+  print $ fromSingleton 0 [1,2]
