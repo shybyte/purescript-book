@@ -121,3 +121,7 @@ bounds = foldl combine emptyBounds
   where
   combine :: Bounds -> Shape -> Bounds
   combine b shape = shapeBounds shape \/ b
+
+
+instance showShapeInstace :: Show Shape where
+  show = showShape

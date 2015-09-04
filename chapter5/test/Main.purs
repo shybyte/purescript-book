@@ -36,3 +36,4 @@ main = do
   log (showBounds (bounds picture))
   print $ showBounds $ shapeBounds $ Clipped (Point{x:0.0,y:0.0}) 10.0 10.0 picture
   print $ showBounds $ shapeBounds $ Clipped (Point{x:0.0,y:0.0}) 50.0 50.0 picture
+  print $ Text (Point {x: 10.0, y: 20.0}) "Text of Text"
