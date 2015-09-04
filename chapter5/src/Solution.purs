@@ -3,6 +3,7 @@ module Solution where
 import Prelude
 import Data.Picture
 import Data.Maybe
+import Math
 
 
 factorial :: Int -> Int
@@ -61,8 +62,17 @@ scale2 (Line (Point{x: x1, y: y1}) (Point{x: x2, y: y2})) =
     y1' = scale2ToCenter y1 centerY
     y2' = scale2ToCenter y2 centerY
 scale2 text@(Text _ _) = text
+scale2 (Clipped point w h picture) = Clipped point (w/2.0) (h/2.0) picture
 
 
 getText :: Shape -> Maybe String
 getText (Text _ text) = Just text
 getText _ = Nothing
+
+
+area :: Shape -> Number
+area (Circle c r) = r * r * Math.pi
+area (Rectangle c w h) = w * h
+area (Clipped point w h picture) = w * h
+area _ = 0.0
+

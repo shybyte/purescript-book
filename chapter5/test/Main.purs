@@ -16,7 +16,7 @@ picture :: Picture
 picture = [circle, rectangle]
 
 main = do
-  log (showBounds (bounds picture))
+
   print $ factorial 5
   print $ binomialCoefficients 5 0
   print $ binomialCoefficients 6 6
@@ -33,3 +33,6 @@ main = do
   print $ showShape $ scale2 $ Line (Point {x: 10.0, y: 20.0}) (Point {x: 20.0, y: 30.0})
   print $ getText $ Line (Point {x: 10.0, y: 20.0}) (Point {x: 20.0, y: 30.0})
   print $ getText $ Text (Point {x: 10.0, y: 20.0}) "Text of Text"
+  log (showBounds (bounds picture))
+  print $ showBounds $ shapeBounds $ Clipped (Point{x:0.0,y:0.0}) 10.0 10.0 picture
+  print $ showBounds $ shapeBounds $ Clipped (Point{x:0.0,y:0.0}) 50.0 50.0 picture
