@@ -1,8 +1,10 @@
 module Test.Main where
 
+import Prelude
 import Control.Monad.Eff.Console
 
 import Data.Picture
+import Solution
 
 circle :: Shape
 circle = Circle (Point { x: 0.0, y: 0.0 }) 10.0
@@ -13,4 +15,9 @@ rectangle = Rectangle (Point { x: 10.0, y: 10.0 }) 10.0 10.0
 picture :: Picture
 picture = [circle, rectangle]
 
-main = log (showBounds (bounds picture))
+main = do
+  log (showBounds (bounds picture))
+  print $ factorial 5
+  print $ binomialCoefficients 5 0
+  print $ binomialCoefficients 6 6
+  print $ binomialCoefficients 5 3
