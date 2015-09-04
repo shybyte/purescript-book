@@ -21,8 +21,12 @@ instance eqComlex :: Eq Complex where
 data NonEmpty a = NonEmpty a (Array a)
 
 instance semigroupNonEmpty :: Semigroup (NonEmpty a) where
-  append (NonEmpty a1 array1) (NonEmpty a2 array2 )= NonEmpty a1 ( a2 : (array1 <> array2))
+  append (NonEmpty a1 array1) (NonEmpty a2 array2 )= NonEmpty a1 ( array1 <> (a2 : array2))
 
 
---instance showNonempty :: Show (NonEmpty a) where
---  show (NonEmpty a array) = "Nonempty (" ++ show (a:array)  ++ ")"
+instance semigroupFunctor :: Functor NonEmpty where
+  map mapFunction (NonEmpty a array )= NonEmpty (mapFunction a) (mapFunction <$> array)
+
+
+instance showNonempty :: (Show a) => Show (NonEmpty a) where
+  show (NonEmpty a array) = "Nonempty (" ++ show (a:array)  ++ ")"

@@ -17,3 +17,7 @@ main = do
   print ("foo" `hashEqual` "bar")
 
   print (Complex {real: 5.0, imaginary: 2.0})
+  print (NonEmpty 1 [2,3,4])
+  print $ ((+) 1) <$> (NonEmpty 1 [2,3,4])
+  print $ ((+) 1) <$> (NonEmpty 1 [2,3,4])
+  print $ (NonEmpty 1 [2,3,4]) <> (NonEmpty 5 [6,7])
