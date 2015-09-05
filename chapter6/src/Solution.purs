@@ -44,3 +44,24 @@ instance foldableNonEmpty :: Foldable NonEmpty where
 instance eqNonempty :: (Eq a) => Eq (NonEmpty a) where
   eq (NonEmpty a1 array1) (NonEmpty a2 array2)  =
     a1 == a2 && array1 == array2
+
+
+
+data Extended a = Finite a | Infinite
+
+instance eqExtended :: (Eq a) => Eq (Extended a) where
+  --compare :: a -> a -> Ordering
+  eq Infinite Infinite  = true
+  eq Infinite _  = false
+  eq _ Infinite  = false
+  eq (Finite a1) (Finite a2)  = a1 == a2
+
+instance ordExtended :: (Ord a) => Ord (Extended a) where
+  --compare :: a -> a -> Ordering
+  compare Infinite Infinite  = EQ
+  compare Infinite _  = GT
+  compare _ Infinite  = LT
+  compare (Finite a1) (Finite a2)  = compare a1  a2
+
+
+-- class (Eq a) <= Ord a where

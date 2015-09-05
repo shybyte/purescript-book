@@ -29,3 +29,12 @@ main = do
   print $ (NonEmpty 1 [2,3,4]) == (NonEmpty 1 [6,7])
   print $ (NonEmpty 1 [5]) == (NonEmpty 2 [5])
   print $ (NonEmpty 1 [2,3,4]) == (NonEmpty 1 [2,3,4])
+  print $ (Finite 1) == (Finite 1)
+  print $ (Finite 1) == (Finite 2)
+  print $ (Finite 1) == Infinite
+  print $ Infinite == Infinite :: Extended String
+  print $ (Finite 1) `compare` (Finite 1)
+  print $ (Finite 1) `compare` (Finite 2)
+  print $ (Finite 1) `compare` Infinite
+  print $ Infinite `compare` (Finite 1)
+  print $ Infinite `compare` Infinite :: Extended String
