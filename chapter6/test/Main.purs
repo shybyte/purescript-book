@@ -52,3 +52,6 @@ main = do
   print $ hasDuplicates [1,2,3,2]
   print $ hasDuplicates ["1", "1"]
   print $ hasDuplicates [1,2,3]
+  print $ hash $ Hour 10
+  print $ hash $ Hour 22
+  print $ hash $ Hour 2

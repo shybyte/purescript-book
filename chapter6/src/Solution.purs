@@ -1,6 +1,7 @@
 module Solution where
 
 import Prelude
+import Data.Function (on)
 import Data.Maybe
 import Data.Array
 import Data.Array.Unsafe (unsafeIndex)
@@ -110,3 +111,13 @@ hasDuplicates array = hasDuplicates' hashEqual || hasDuplicates' eq
     hasDuplicates' testEq = length (nubBy testEq array) /= length array
 
 
+newtype Hour = Hour Int
+
+instance eqHour :: Eq Hour where
+ eq = eq `on` modHour12
+
+modHour12 :: Hour -> Int
+modHour12 (Hour hour) = hour `mod` 12
+
+instance hashHour :: Hashable Hour where
+  hash hour = hash $ modHour12 hour
