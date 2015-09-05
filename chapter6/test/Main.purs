@@ -4,8 +4,16 @@ import Prelude
 import Data.Hashable
 import Control.Monad.Eff.Console
 import Data.Foldable
+import Data.Array (length)
 
 import Solution
+
+--instance unsafeDefault :: Unsafe
+
+--instance unsafe :: Unsafe
+
+--unsafeLast :: forall a. (Unsafe) => Array a -> a
+--unsafeLast array = unsafeIndex2 array (length array - 1)
 
 main = do
   print (hash 123)
@@ -39,3 +47,5 @@ main = do
   print $ Infinite `compare` (Finite 1)
   print $ Infinite `compare` Infinite :: Extended String
   print $ foldMap (show <<< ((+) 1) ) (OneMore 1 [2,3,4])
+  print $ act "0" (Self "123")
+--  print $ unsafeLast [1,2,3]

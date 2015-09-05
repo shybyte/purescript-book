@@ -3,6 +3,7 @@ module Solution where
 import Prelude
 import Data.Maybe
 import Data.Array
+import Data.Array.Unsafe (unsafeIndex)
 import Data.Foldable
 import Data.Monoid
 
@@ -94,3 +95,10 @@ instance showSelf :: (Show a) => Show (Self a) where
 
 instance selfAction :: (Monoid m) =>  Action m (Self m) where
  act m (Self self) = Self (m <> self)
+
+
+class Unsafe
+
+unsafeIndex2 :: forall a. (Unsafe) => Array a -> Int -> a
+unsafeIndex2 = unsafeIndex
+
