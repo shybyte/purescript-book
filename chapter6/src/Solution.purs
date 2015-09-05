@@ -6,6 +6,7 @@ import Data.Array
 import Data.Array.Unsafe (unsafeIndex)
 import Data.Foldable
 import Data.Monoid
+import Data.Hashable
 
 
 newtype Complex = Complex
@@ -101,4 +102,11 @@ class Unsafe
 
 unsafeIndex2 :: forall a. (Unsafe) => Array a -> Int -> a
 unsafeIndex2 = unsafeIndex
+
+
+hasDuplicates :: forall a. (Hashable a) => Array a -> Boolean
+hasDuplicates array = hasDuplicates' hashEqual || hasDuplicates' eq
+  where
+    hasDuplicates' testEq = length (nubBy testEq array) /= length array
+
 

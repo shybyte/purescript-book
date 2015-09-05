@@ -49,3 +49,6 @@ main = do
   print $ foldMap (show <<< ((+) 1) ) (OneMore 1 [2,3,4])
   print $ act "0" (Self "123")
 --  print $ unsafeLast [1,2,3]
+  print $ hasDuplicates [1,2,3,2]
+  print $ hasDuplicates ["1", "1"]
+  print $ hasDuplicates [1,2,3]
