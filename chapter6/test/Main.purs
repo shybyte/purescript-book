@@ -26,3 +26,6 @@ main = do
   print $ foldMap (show <<< ((+) 1) ) [1,2,3,4]
   print $ foldl (\b a -> b ++ show a) "Array: " [1,2,3,4]
   print $ foldl (\b a -> b ++ show a) "Array: " (NonEmpty 1 [2,3,4])
+  print $ (NonEmpty 1 [2,3,4]) == (NonEmpty 1 [6,7])
+  print $ (NonEmpty 1 [5]) == (NonEmpty 2 [5])
+  print $ (NonEmpty 1 [2,3,4]) == (NonEmpty 1 [2,3,4])

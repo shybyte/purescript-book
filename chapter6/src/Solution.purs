@@ -41,3 +41,6 @@ instance foldableNonEmpty :: Foldable NonEmpty where
   foldl bab b  (NonEmpty a array) = foldl bab (bab b a) array
   foldMap f xs = foldr (\x acc -> f x <> acc) mempty xs
 
+instance eqNonempty :: (Eq a) => Eq (NonEmpty a) where
+  eq (NonEmpty a1 array1) (NonEmpty a2 array2)  =
+    a1 == a2 && array1 == array2
