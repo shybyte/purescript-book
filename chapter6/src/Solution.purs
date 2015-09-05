@@ -64,4 +64,12 @@ instance ordExtended :: (Ord a) => Ord (Extended a) where
   compare (Finite a1) (Finite a2)  = compare a1  a2
 
 
--- class (Eq a) <= Ord a where
+
+data OneMore f a = OneMore a (f a)
+
+instance foldableOneMore :: (Foldable f) => Foldable (OneMore f) where
+  --foldr :: forall a b. (a -> b -> b) -> b -> f a -> b
+  foldr abb b  (OneMore a array) = abb a (foldr abb b array)
+  --foldl :: forall a b. (b -> a -> b) -> b -> f a -> b
+  foldl bab b  (OneMore a array) = foldl bab (bab b a) array
+  foldMap f xs = foldr (\x acc -> f x <> acc) mempty xs

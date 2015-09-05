@@ -38,3 +38,4 @@ main = do
   print $ (Finite 1) `compare` Infinite
   print $ Infinite `compare` (Finite 1)
   print $ Infinite `compare` Infinite :: Extended String
+  print $ foldMap (show <<< ((+) 1) ) (OneMore 1 [2,3,4])
