@@ -86,3 +86,11 @@ class (Monoid m) <= Action m a where
 instance arrayAction :: (Action m a, Monoid m) =>  Action m (Array a) where
  act m array = map (act m) array
 
+
+newtype Self m = Self m
+
+instance showSelf :: (Show a) => Show (Self a) where
+  show (Self a) = "Self (" ++ show a ++ ")"
+
+instance selfAction :: (Monoid m) =>  Action m (Self m) where
+ act m (Self self) = Self (m <> self)
