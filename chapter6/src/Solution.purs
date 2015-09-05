@@ -73,3 +73,16 @@ instance foldableOneMore :: (Foldable f) => Foldable (OneMore f) where
   --foldl :: forall a b. (b -> a -> b) -> b -> f a -> b
   foldl bab b  (OneMore a array) = foldl bab (bab b a) array
   foldMap f xs = foldr (\x acc -> f x <> acc) mempty xs
+
+
+
+class (Monoid m) <= Action m a where
+ act :: m -> a -> a
+
+--instance repeatAction :: Action Int String where
+--  act 0 _ = ""
+-- act n s = s ++ act (n - 1) s
+
+instance arrayAction :: (Action m a, Monoid m) =>  Action m (Array a) where
+ act m array = map (act m) array
+
