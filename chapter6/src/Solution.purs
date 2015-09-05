@@ -3,6 +3,8 @@ module Solution where
 import Prelude
 import Data.Maybe
 import Data.Array
+import Data.Foldable
+import Data.Monoid
 
 
 newtype Complex = Complex
@@ -30,3 +32,12 @@ instance semigroupFunctor :: Functor NonEmpty where
 
 instance showNonempty :: (Show a) => Show (NonEmpty a) where
   show (NonEmpty a array) = "Nonempty (" ++ show (a:array)  ++ ")"
+
+
+instance foldableNonEmpty :: Foldable NonEmpty where
+  --foldr :: forall a b. (a -> b -> b) -> b -> f a -> b
+  foldr abb b  (NonEmpty a array) = abb a (foldr abb b array)
+  --foldl :: forall a b. (b -> a -> b) -> b -> f a -> b
+  foldl bab b  (NonEmpty a array) = foldl bab (bab b a) array
+  foldMap f xs = foldr (\x acc -> f x <> acc) mempty xs
+
