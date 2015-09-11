@@ -30,7 +30,7 @@ main = do
   print $ fullNameEither (Just "Marco") Nothing (Just "Steel")
   print $ fullNameEither Nothing Nothing Nothing
   print $ combineList (toList [Just 1, Just 2, Just 3])
-  print $ combineList (toList [Just 1, Just 2, Just 3])
+  print $ combineList (toList [Just 1, Nothing, Nothing])
   print $ combineList (toList [Left "text" :: Either String Number, Left "text2" :: Either String Number])
   print $ combineList (toList [Left "text" :: Either String Number, Right 123.0 :: Either String Number])
   print $ combineList (toList [Right 321 :: EitherSN, Right 123 :: EitherSN])
