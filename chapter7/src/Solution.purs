@@ -4,6 +4,14 @@ import Prelude
 import Data.Maybe
 import Data.Either
 import Data.List
+import Data.Traversable
+import Data.Foldable
+import Data.Monoid
+
+import Control.Apply ((*>))
+
+import Data.AddressBook
+import Data.AddressBook.Validation
 
 
 --class Functor f where
@@ -102,4 +110,79 @@ combineMaybe Nothing = pure Nothing
 combineMaybe (Just fa) = map Just fa
 
 --mapFA :: (a -> Maybe a) -> f a -> f (Maybe a)
+
+
+nonEmpty2 :: String -> Either String Unit
+nonEmpty2 "" = Left "Field cannot be empty"
+nonEmpty2 _  = Right unit
+
+validatePerson2 :: Person -> Either String Person
+--validatePerson2 (Person o) =
+--  person <$> (nonEmpty2 o.firstName *> pure o.firstName)
+--         <*> (nonEmpty2 o.lastName  *> pure o.lastName)
+--         <*> pure o.address
+--         <*> pure o.phones
+validatePerson2 (Person o) =
+  mappedFirstName
+         <*> (nonEmpty2 o.lastName  *> pure o.lastName)
+         <*> pure o.address
+         <*> pure o.phones
+  where
+    nonEmtpyFirstName :: Either String Unit
+    nonEmtpyFirstName = nonEmpty2 o.firstName
+    pureFirstName :: Either String String
+    pureFirstName = pure o.firstName
+    validatedFirstName :: Either String String
+    validatedFirstName = nonEmtpyFirstName *> pureFirstName
+    mappedFirstName :: Either String (String -> Address -> Array PhoneNumber -> Person)
+    mappedFirstName = map person validatedFirstName
+
+
+-- Write a Traversable instance for the following binary tree data structure, which combines side-effects from left-to-righ
+data Tree a = Leaf | Branch (Tree a) a (Tree a)
+
+--tree = Branch Leaf "123" Leaf
+
+instance showTree :: (Show a) => Show (Tree a) where
+  show Leaf = "Leaf"
+  show (Branch treeL a treeR) = "Branch (" ++ show treeL ++") "++ show a ++ " (" ++ show treeR ++ ")"
+
+instance foldableTree :: Foldable Tree where
+  foldr abb b Leaf  = b
+  foldr abb b (Branch treeL a treeR)  = foldr abb (abb a (foldr abb b treeR)) treeL
+
+  foldl bab b Leaf  = b
+  foldl bab b (Branch treeL a treeR) = foldl bab (bab (foldl bab b treeL) a) treeR
+
+  foldMap f xs = foldr (\x acc -> f x <> acc) mempty xs
+
+
+instance functorTree :: Functor Tree where
+  map = mapTree
+
+mapTree :: forall a b. (a -> b) -> Tree a -> Tree b
+mapTree fn (Branch treeL a treeR)  = Branch (mapTree fn treeL) (fn a) (mapTree fn treeR)
+mapTree fn Leaf = Leaf
+
+--class (Functor t, Foldable t) <= Traversable t where
+--  traverse :: forall a b m. (Applicative m) => (a -> m b) -> t a -> m (t b)
+--  sequence :: forall a m. (Applicative m) => t (m a) -> m (t a)
+
+--instance traversableList :: Traversable List where
+--  traverse _ Nil = pure Nil
+--  traverse f (Cons a as) = Cons <$> f a <*> traverse f as
+--  sequence Nil = pure Nil
+--  sequence (Cons a as) = Cons <$> a <*> sequence as
+
+
+-- http://stackoverflow.com/questions/7460809/can-someone-explain-the-traverse-function-in-haskell
+instance traversableTree :: Traversable Tree where
+  traverse _ Leaf = pure Leaf
+  traverse aToMB (Branch treeL a treeR) = Branch <$> traverse aToMB treeL <*> aToMB a <*> traverse aToMB treeR
+  --traverse f = sequence <<< map f
+  sequence Leaf = pure Leaf
+  sequence (Branch treeL a treeR)  = Branch <$> sequence treeL <*> a <*> sequence treeR
+  --sequence = traverse (\x -> x)
+
+
 
