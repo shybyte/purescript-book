@@ -3,6 +3,7 @@ module Solution where
 import Prelude
 import Data.Maybe
 import Data.Either
+import Data.List
 
 
 --class Functor f where
@@ -70,4 +71,35 @@ fullNameEither :: Maybe String -> Maybe String -> Maybe String -> Either String 
 --             <*> (last   <?> "Last name was missing")
 fullNameEither first middle last =
     lift3 fullName (first  <?> "First name was missing") (middle <?> "Middle name was missing") (last   <?> "Last name was missing")
+
+--class (Functor f) <= Apply f where
+--  apply :: forall a b. f (a -> b) -> f a -> f b
+-- Cons :: a -> (List a -> List a)
+
+combineList :: forall f a. (Applicative f) => List (f a) -> f (List a)
+combineList Nil = pure Nil
+--combineList (Cons x xs) = Cons <$> x <*> combineList xs
+combineList (Cons x xs) = apply mappedHead combinedTail
+  where
+    mappedHead :: f (List a -> List a)
+    mappedHead = (map Cons x)
+    combinedTail :: f (List a)
+    combinedTail = combineList xs
+
+
+
+(+!) :: forall f. (Applicative f) => f Number -> f Number -> f Number
+(+!) = lift2 (+)
+
+
+--class Functor f where
+--  map :: forall a b. (a -> b) ->
+--                     f a -> f b
+--
+
+combineMaybe :: forall a f. (Applicative f) => Maybe (f a) -> f (Maybe a)
+combineMaybe Nothing = pure Nothing
+combineMaybe (Just fa) = map Just fa
+
+--mapFA :: (a -> Maybe a) -> f a -> f (Maybe a)
 
