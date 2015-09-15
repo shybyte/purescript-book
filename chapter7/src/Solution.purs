@@ -188,7 +188,9 @@ instance traversableTree :: Traversable Tree where
 
 
 
--- Use a regular expression validator to ensure that the state field of the Address type contains two alphabetic characters. Hint: see the source code for phoneNumberRegex.
+-- 7.10.1
+-- Use a regular expression validator to ensure that the state field of the Address type contains two alphabetic characters.
+-- Hint: see the source code for phoneNumberRegex.
 stateRegex :: R.Regex
 stateRegex =
   R.regex
@@ -198,6 +200,25 @@ stateRegex =
 
 validateAddress2 :: Address -> V Errors Address
 validateAddress2 (Address o) =
-  address <$> (nonEmpty "Street" o.street *> pure o.street)
-          <*> (nonEmpty "City"   o.city   *> pure o.city)
+  address <$> (nonEmpty3 "Street" o.street *> pure o.street)
+          <*> (nonEmpty4 "City"   o.city   *> pure o.city)
           <*> (matches "State" stateRegex o.state *> pure o.state)
+
+
+
+-- 7.10.2
+-- Using the matches validator, write a validation function which checks that a string is not entirely whitespace.
+-- Use it to replace nonEmpty where appropriate.
+
+nonEmptyRegex :: R.Regex
+nonEmptyRegex =
+  R.regex "\\S" R.noFlags
+
+nonEmpty3 :: String -> String -> V Errors Unit
+nonEmpty3 fieldName s = matches fieldName nonEmptyRegex s
+
+nonEmpty4 :: String -> String -> V Errors Unit
+nonEmpty4 _ value
+  | R.test nonEmptyRegex value = pure unit
+nonEmpty4 field _ =
+  invalid ["Field '" ++ field ++ " must contain at least one visible char."]
