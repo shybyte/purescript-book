@@ -222,3 +222,46 @@ nonEmpty4 _ value
   | R.test nonEmptyRegex value = pure unit
 nonEmpty4 field _ =
   invalid ["Field '" ++ field ++ " must contain at least one visible char."]
+
+
+
+
+-- 7.11.2
+-- Modify the code to make the address field of the Person type optional using Data.Maybe.
+-- Hint: Use traverse to validate a field of type Maybe a.
+
+newtype Person3 = Person3
+  { firstName :: String
+  , lastName  :: String
+  , address   :: Maybe Address
+  , phones    :: Array PhoneNumber
+  }
+
+person3 :: String -> String -> Maybe Address -> Array PhoneNumber -> Person3
+person3 firstName lastName address phones = Person3
+  { firstName: firstName
+  , lastName:  lastName
+  , address:   address
+  , phones:    phones
+  }
+
+validatePerson3 :: Person3 -> V Errors Person3
+validatePerson3 (Person3 o) =
+  person3 <$> (nonEmpty "First Name" o.firstName *> pure o.firstName)
+         <*> (nonEmpty "Last Name"  o.lastName  *> pure o.lastName)
+         <*> addressValidator
+         <*> (arrayNonEmpty "Phone Numbers" o.phones *> traverse validatePhoneNumber o.phones)
+  where
+    addressValidator :: V Errors (Maybe Address)
+    addressValidator = validateMaybeAddress o.address
+
+validateMaybeAddress :: (Maybe Address) -> V Errors (Maybe Address)
+validateMaybeAddress maybeAddress = traverse validateAddress maybeAddress
+
+instance showPerson3 :: Show Person3 where
+  show (Person3 o) = "Person " ++
+    "{ firstName: " ++ show o.firstName ++
+    ", lastName: "  ++ show o.lastName ++
+    ", address: "   ++ show o.address ++
+    ", phones: "    ++ show o.phones ++
+    " }"

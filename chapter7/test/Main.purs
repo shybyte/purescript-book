@@ -31,6 +31,13 @@ main = do
   print $ validateAddress2 $ address "" "" ""
   print $ validateAddress2 $ address " " " " "22"
   print $ validateAddress2 $ address "Auer" "Berlin" "CA"
+  print $ validateMaybeAddress $ Just (address "Auer" "Berlin" "CA")
+  print $ validateMaybeAddress $ Just (address "" "Berlin" "CA")
+  print $ validateMaybeAddress $ Nothing
+  print $ validatePerson3 $ person3 "Marco" "Steel" (Just $ address "" "Berlin" "CA") [phoneNumber HomePhone "123"]
+  print $ validatePerson3 $ person3 "Marco" "Steel" Nothing [phoneNumber HomePhone "123-123-1234"]
+
+
 --  print $ ((+) 1) <$> Just 1
 --  print $ ((+) 1) <$> Nothing
 --  print $ (+) <$> Just 1 <*> Just 2
