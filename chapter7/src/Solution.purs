@@ -7,6 +7,8 @@ import Data.List
 import Data.Traversable
 import Data.Foldable
 import Data.Monoid
+import Data.Validation
+import qualified Data.String.Regex as R
 
 import Control.Apply ((*>))
 
@@ -186,3 +188,16 @@ instance traversableTree :: Traversable Tree where
 
 
 
+-- Use a regular expression validator to ensure that the state field of the Address type contains two alphabetic characters. Hint: see the source code for phoneNumberRegex.
+stateRegex :: R.Regex
+stateRegex =
+  R.regex
+    "^[A-Z]{2}$"
+    (R.noFlags {ignoreCase = true})
+
+
+validateAddress2 :: Address -> V Errors Address
+validateAddress2 (Address o) =
+  address <$> (nonEmpty "Street" o.street *> pure o.street)
+          <*> (nonEmpty "City"   o.city   *> pure o.city)
+          <*> (matches "State" stateRegex o.state *> pure o.state)

@@ -26,6 +26,11 @@ main = do
   print $ traverse (\x -> if x == 3 then Nothing else Just (show x)) tree123
   print $ sequence treeMaybe1
   print $ sequence treeMaybeNothing
+  print $ validatePhoneNumber $ phoneNumber HomePhone "555-555-5555"
+  print $ validatePhoneNumber $ phoneNumber HomePhone "555.555-5555"
+  print $ validateAddress2 $ address "" "" ""
+  print $ validateAddress2 $ address "1" "2" "22"
+  print $ validateAddress2 $ address "Auer" "Berlin" "CA"
 --  print $ ((+) 1) <$> Just 1
 --  print $ ((+) 1) <$> Nothing
 --  print $ (+) <$> Just 1 <*> Just 2
