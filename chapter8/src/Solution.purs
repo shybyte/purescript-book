@@ -29,3 +29,21 @@ sums =
   foldM (\a b -> [a, a+b, b]) 0
   >>> nub
   >>> sort
+
+
+-- 8.7.3
+-- c
+
+-- class (Functor f) <= Apply f where
+--   apply :: forall a b. f (a -> b) -> f a -> f b
+--
+-- instance applyMaybe :: Apply Maybe where
+--   apply (Just fn) x = fn <$> x
+--   apply Nothing   _ = Nothing
+--
+--
+-- ap :: forall m. (Monad m) => m (a -> b) -> m a -> m b
+-- ap mf ma = do
+--  f <- mf -- "early return" if mf is Nothing
+--  a <- ma -- "early return" if ma is Nothing
+--  return (f a) -- f <$> ma == map f ma
