@@ -129,3 +129,46 @@ filterM p (Cons x xs) = do
   ys <- filterM p xs
   return (if b then (Cons x ys) else ys)
 
+
+
+-- 8.7.6
+-- Use the monad laws to prove that for any monad, the following holds:
+-- lift2 f (return a) (return b) = return (f a b)
+
+map2 :: forall m a b. (Monad m) => (a -> b) -> m a -> m b
+map2 f ma = do
+  a <- ma
+  return (f a)
+
+--  lift2 f (return a) (return b) = return (f a b)
+--  lift2 f [a] [b] = [f a b]
+--  lift2 f (Just 1) (Just 2) = Just (f 1 2)
+
+-- lift2 :: forall f a b c. (Applicative f). (a -> b -> c) -> f a -> f b -> f c
+-- lift2 f a b = f <$> a <*> b
+
+lift2' :: forall m a b c. (Monad m) => (a -> b -> c) -> m a -> m b -> m c
+lift2' fab_c ma mb = fab_c <$> ma <*> mb
+
+lift2'2 :: forall m a b c. (Monad m) => (a -> b -> c) -> m a -> m b -> m c
+lift2'2 fab_c ma mb = do
+  -- map2 fab_c ma
+  a <- ma
+  let mfb_c = return (fab_c a)
+  --ap mfb_c mb
+  fb_c <- mfb_c
+  b <- mb
+  return (fb_c b)
+
+lift2'3 :: forall m a b c. (Monad m) => (a -> b -> c) -> m a -> m b -> m c
+lift2'3 fab_c ma mb = do
+  a <- ma
+  let fb_c = fab_c a
+  b <- mb
+  return (fb_c b)
+
+lift2'4 :: forall m a b c. (Monad m) => (a -> b -> c) -> m a -> m b -> m c
+lift2'4 fab_c ma mb = do
+  a <- ma
+  b <- mb
+  return (fab_c a b)
