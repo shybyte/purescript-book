@@ -2,7 +2,8 @@ module Solution where
 
 import Prelude
 import Data.Maybe
-import Data.Array
+import Data.List (List(..))
+import Data.Array (foldM, nub, sort, tail, head)
 
 -- 8.7.1
 -- Look up the types of the head and tail functions from the Data.Array module in the purescript-arrays package.
@@ -115,4 +116,16 @@ sums =
 --
 -- -- c1 == c2 == c3
 
+
+-- 8.7.5
+-- Write a function filterM which generalizes the filter function on lists.
+-- Your function should have the following type signature:
+-- Test your function in PSCi using the Maybe and Array monads.
+
+filterM :: forall m a. (Monad m) => (a -> m Boolean) -> List a -> m (List a)
+filterM p Nil     = return Nil
+filterM p (Cons x xs) = do
+  b  <- p x
+  ys <- filterM p xs
+  return (if b then (Cons x ys) else ys)
 
