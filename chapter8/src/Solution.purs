@@ -32,7 +32,7 @@ sums =
 
 
 -- 8.7.3
--- c
+-- Confirm that the ap function and the apply operator agree for the Maybe monad
 
 -- class (Functor f) <= Apply f where
 --   apply :: forall a b. f (a -> b) -> f a -> f b
