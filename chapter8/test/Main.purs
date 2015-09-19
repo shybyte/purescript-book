@@ -1,6 +1,6 @@
 module Test.Main where
 
-import Control.Monad.Eff.Console
+import Control.Monad.Eff.Console (print)
 
 import Prelude
 import Solution
@@ -8,6 +8,9 @@ import Data.Maybe
 import Control.Apply (lift2)
 import qualified Data.Array as A
 import qualified Data.List as L
+import Control.Monad.Eff
+import Control.Monad.Eff.Exception
+import Debug.Trace (trace)
 
 
 main = do
@@ -31,3 +34,17 @@ main = do
   print $ lift2'4 (+) [1] [2]
   print $ lift2 (+) Nothing (Just 2)
   print $ lift2 (+) (Just 1) (Just 2)
+  -- 8.17.1
+  -- result <- safeDivide 10 5
+  -- print $ result
+  -- print "This was OK."
+  -- this would throw a runtime exception
+  --  error <- safeDivide 10 0
+  --  print $ error
+  --  print "This was NOT OK."
+  valueOrDefault <- catchException printException $ safeDivide 10 0
+  print valueOrDefault
+
+  where
+  printException :: forall eff. Error -> Eff eff Int
+  printException e = trace (message e) (\_ -> return 23)

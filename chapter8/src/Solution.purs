@@ -4,6 +4,8 @@ import Prelude
 import Data.Maybe
 import Data.List (List(..))
 import Data.Array (foldM, nub, sort, tail, head)
+import Control.Monad.Eff
+import Control.Monad.Eff.Exception
 
 -- 8.7.1
 -- Look up the types of the head and tail functions from the Data.Array module in the purescript-arrays package.
@@ -172,3 +174,10 @@ lift2'4 fab_c ma mb = do
   a <- ma
   b <- mb
   return (fab_c a b)
+
+-- 8.17.1
+-- Rewrite the safeDivide function to throw an exception using throwException if the denominator is zero.
+
+safeDivide :: forall eff. Int -> Int -> Eff (err :: EXCEPTION | eff) Int
+safeDivide _ 0 = throwException $ error $ "Only Chuck Norris can divide by zero"
+safeDivide a b = return (a / b)
