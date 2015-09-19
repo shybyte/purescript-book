@@ -42,9 +42,9 @@ main = do
   --  error <- safeDivide 10 0
   --  print $ error
   --  print "This was NOT OK."
-  valueOrDefault <- catchException printException $ safeDivide 10 0
+  valueOrDefault <- catchException printExceptionReturnDefault $ safeDivide 10 0
   print valueOrDefault
 
   where
-  printException :: forall eff. Error -> Eff eff Int
-  printException e = trace (message e) (\_ -> return 23)
+  printExceptionReturnDefault :: forall eff. Error -> Eff eff Int
+  printExceptionReturnDefault e = trace (message e) (\_ -> return 23)
