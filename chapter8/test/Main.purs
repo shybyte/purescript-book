@@ -44,6 +44,10 @@ main = do
   --  print "This was NOT OK."
   valueOrDefault <- catchException printExceptionReturnDefault $ safeDivide 10 0
   print valueOrDefault
+  -- 8.17.2
+  print $ simulate 1.0 2.0 3.0
+  pi <- estimatePi 100000.0
+  print $ "Pi = " ++ show pi
 
   where
   printExceptionReturnDefault :: forall eff. Error -> Eff eff Int

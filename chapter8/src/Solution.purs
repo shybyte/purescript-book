@@ -6,6 +6,8 @@ import Data.List (List(..))
 import Data.Array (foldM, nub, sort, tail, head)
 import Control.Monad.Eff
 import Control.Monad.Eff.Exception
+import Control.Monad.ST
+import Control.Monad.Eff.Random
 
 -- 8.7.1
 -- Look up the types of the head and tail functions from the Data.Array module in the purescript-arrays package.
@@ -181,3 +183,37 @@ lift2'4 fab_c ma mb = do
 safeDivide :: forall eff. Int -> Int -> Eff (err :: EXCEPTION | eff) Int
 safeDivide _ 0 = throwException $ error $ "Only Chuck Norris can divide by zero"
 safeDivide a b = return (a / b)
+
+
+
+-- 8.17.1
+-- The following is a simple way to estimate pi:
+-- Randomly choose a large number N of points in the unit square, and count the number n which lie in the inscribed circle.
+-- An estimate for pi is 4n/N
+-- Use the RANDOM and ST effects with the forE function to write a function which estimates pi in this way.
+
+simulate :: Number -> Number -> Number -> Number
+simulate x0 v0 time = runPure (runST (do
+  ref <- newSTRef { x: x0, v: v0 }
+  forE 0.0 (time * 1000.0) $ \i -> do
+    modifySTRef ref (\o ->
+      { v: o.v - 9.81 * 0.001
+      , x: o.x + o.v * 0.001
+      })
+    return unit
+  final <- readSTRef ref
+  return final.x))
+
+estimatePi :: forall eff. Number -> Eff (random :: RANDOM | eff) Number
+estimatePi n = runST do
+  ref <- newSTRef { count: 0.0 }
+  forE 0.0 n $ \i -> do
+    randomX <- randomRange (-1.0) 1.0
+    randomY <- randomRange (-1.0) 1.0
+    let isInCircle = (randomX*randomX + randomY*randomY) < 1.0
+    modifySTRef ref (\o ->
+      { count: o.count + (if isInCircle then 1.0 else 0.0)})
+    return unit
+  final <- readSTRef ref
+  return $ final.count*4.0/n
+
