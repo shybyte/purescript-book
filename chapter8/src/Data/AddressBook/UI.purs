@@ -32,15 +32,12 @@ valueOf sel = do
 displayValidationErrors :: forall eff. Array String -> Eff (dom :: DOM | eff) Unit
 displayValidationErrors errs = do
   alert <- createElement "div"
-    >>= addClass "alert"
-    >>= addClass "alert-danger"
-
-  ul <- createElement "ul"
-  ul `appendChild` alert
 
   foreachE errs $ \err -> do
-    li <- createElement "li" >>= setText err
-    li `appendChild` ul
+    div <- createElement "div" >>= setText err
+    addClass "alert" div
+    addClass "alert-danger" div
+    div `appendChild` alert
     return unit
 
   Just validationErrors <- querySelector "#validationErrors"
