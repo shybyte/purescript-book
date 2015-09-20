@@ -27,6 +27,9 @@ foreign import setText :: forall eff. String -> Node -> Eff (dom :: DOM | eff) N
 
 foreign import getValue :: forall eff. Node -> Eff (dom :: DOM | eff) Foreign
 
+foreign import getParentNode :: forall eff. Node -> Eff (dom :: DOM | eff) Node
+foreign import remove :: forall eff. String -> Eff (dom :: DOM | eff) Unit
+
 foreign import setValue :: forall a eff. a -> Node -> Eff (dom :: DOM | eff) Node 
 
 foreign import setInnerHTML :: forall eff. String -> Node -> Eff (dom :: DOM | eff) Node

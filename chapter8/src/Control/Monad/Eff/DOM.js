@@ -52,6 +52,26 @@ exports.getValue = function(node) {
     };
 };
 
+exports.getParentNode = function(node) {
+    return function() {
+        return node.parentNode;
+    };
+};
+
+exports.remove = function(query) {
+    return function() {
+        var nodes = document.querySelectorAll(query);
+          for (var i = 0; i < nodes.length; i++) {
+            var node = nodes[i];
+            if (node.parentNode) {
+                node.parentNode.removeChild(node);
+            }
+          }
+    };
+};
+
+
+
 exports.setValue = function(value) {
     return function(node) {
         return function() {
