@@ -34,7 +34,9 @@ displayValidationErrors errs = do
   alert <- createElement "div"
 
   foreachE errs $ \err -> do
-    div <- createElement "div" >>= setText err
+    -- div <- createElement "div" >>= setText err
+    div <- createElement "div"
+    setText err div
     addClass "alert" div
     addClass "alert-danger" div
     div `appendChild` alert
@@ -77,6 +79,6 @@ validateAndUpdateUI = do
 setupEventHandlers :: forall eff. Eff (console :: CONSOLE, dom :: DOM | eff) Unit
 setupEventHandlers = do
   -- Listen for changes on form fields
-  body >>= addEventListener "change" validateAndUpdateUI
-
+  myBody <- body
+  addEventListener "change" validateAndUpdateUI myBody
   return unit
