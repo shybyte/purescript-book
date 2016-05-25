@@ -5,15 +5,12 @@ import Control.Monad.Eff (Eff)
 import Data.Foldable (for_)
 import Data.Path (root)
 import FileOperations (countEven, allFiles, isEven)
-import Prelude (Unit, bind, ($))
+import Prelude (Unit, bind, ($), (<$>))
 
 
 testIsEven :: forall eff. Eff (console :: CONSOLE | eff) Unit
 testIsEven = do
-  print $ isEven 0
-  print $ isEven 1
-  print $ isEven 2
-  print $ isEven 3
+  print $ isEven <$> [0, 1, 2, 3]
 
 testCountEven :: forall eff. Eff (console :: CONSOLE | eff) Unit
 testCountEven = do
