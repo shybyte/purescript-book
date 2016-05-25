@@ -1,11 +1,10 @@
 module Test.Main where
 
-import Prelude (Unit, (<$>), ($), bind)
-
 import Control.Monad.Eff
 import Control.Monad.Eff.Console (CONSOLE, print)
+import Data.AddressBook (containsEntry, Address, AddressBook, Entry, findEntryByAddress, showEntry, emptyBook, insertEntry, findEntry)
 import Data.Maybe (Maybe)
-import Data.AddressBook (Address, AddressBook, Entry, findEntryByAddress, showEntry, emptyBook, insertEntry, findEntry)
+import Prelude (Unit, (<$>), ($), bind)
 
 example :: Entry
 example =
@@ -37,5 +36,10 @@ main = do
   print $ printEntry "John" "Smith" book0
   print $ printEntry "John" "Smith" book1
 
+  -- Exercise 2
   print $ showEntry <$> findEntryByAddress example.address book1
   print $ showEntry <$> findEntryByAddress unknownAddress book1
+
+  -- Exercise 3
+  print $ containsEntry "John" "Smith" book1
+  print $ containsEntry "John" "Smith2" book1

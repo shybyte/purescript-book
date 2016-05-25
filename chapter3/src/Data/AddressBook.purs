@@ -1,10 +1,9 @@
 module Data.AddressBook where
 
-import Prelude ((<<<), (==), (&&), (++))
-import Data.List (List(Cons), filter, head)
-import Data.Maybe (Maybe)
-
 import Control.Plus (empty)
+import Data.List (List(Cons), filter, head)
+import Data.Maybe (isJust, Maybe)
+import Prelude ((<<<), (==), (&&), (++))
 
 type Address =
   { street :: String
@@ -37,6 +36,10 @@ findEntry firstName lastName = head <<< filter filterEntry
   where
   filterEntry :: Entry -> Boolean
   filterEntry entry = entry.firstName == firstName && entry.lastName == lastName
+
+
+containsEntry :: String -> String -> AddressBook -> Boolean
+containsEntry firstName lastName = isJust <<< findEntry firstName lastName
 
 
 findEntryByAddress :: Address -> AddressBook -> Maybe Entry
