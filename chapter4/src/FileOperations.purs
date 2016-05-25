@@ -1,9 +1,8 @@
 module FileOperations where
 
-import Prelude
-
-import Data.Path
-import Data.Array
+import Prelude (bind)
+import Data.Path (Path, ls)
+import Data.Array ((:), concatMap)
 
 allFiles :: Path -> Array Path
 allFiles root = root : concatMap allFiles (ls root)
