@@ -1,11 +1,27 @@
 module Test.Main where
 
 import Control.Monad.Eff.Console
-import Data.Path (root)
-import FileOperations (allFiles)
 import Control.Monad.Eff (Eff)
 import Data.Foldable (for_)
-import Prelude (Unit)
+import Data.Path (root)
+import FileOperations (countEven, allFiles, isEven)
+import Prelude (Unit, bind, ($))
+
+
+testIsEven :: forall eff. Eff (console :: CONSOLE | eff) Unit
+testIsEven = do
+  print $ isEven 0
+  print $ isEven 1
+  print $ isEven 2
+  print $ isEven 3
+
+testCountEven :: forall eff. Eff (console :: CONSOLE | eff) Unit
+testCountEven = do
+    print $ countEven [7]
+    print $ countEven [0,1,3]
 
 main :: forall eff. Eff (console :: CONSOLE | eff) Unit
-main = for_ (allFiles root) print
+main = do
+  for_ (allFiles root) print
+  testIsEven
+  testCountEven
