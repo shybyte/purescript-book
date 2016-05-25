@@ -1,7 +1,7 @@
 module Data.AddressBook where
 
 import Control.Plus (empty)
-import Data.List (List(Cons), filter, head)
+import Data.List (List(Cons), filter, head, nubBy)
 import Data.Maybe (isJust, Maybe)
 import Prelude ((<<<), (==), (&&), (++))
 
@@ -40,6 +40,12 @@ findEntry firstName lastName = head <<< filter filterEntry
 
 containsEntry :: String -> String -> AddressBook -> Boolean
 containsEntry firstName lastName = isJust <<< findEntry firstName lastName
+
+
+removeDuplicates :: AddressBook -> AddressBook
+removeDuplicates = nubBy isEqualEntry 
+  where
+  isEqualEntry e1 e2 = e1.firstName == e2.firstName && e1.lastName == e2.lastName
 
 
 findEntryByAddress :: Address -> AddressBook -> Maybe Entry
