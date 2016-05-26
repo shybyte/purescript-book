@@ -4,8 +4,8 @@ import Control.Monad.Eff.Console
 import Control.Monad.Eff (Eff)
 import Data.Foldable (for_)
 import Data.Path (root)
-import FileOperations (countEven, allFiles, isEven)
-import Prelude (Unit, bind, ($), (<$>))
+import FileOperations (removeNegative2, countEven, allFiles, isEven)
+import Prelude (Unit, bind, ($), (<$>), (-), negate)
 
 
 testIsEven :: forall eff. Eff (console :: CONSOLE | eff) Unit
@@ -22,3 +22,4 @@ main = do
   for_ (allFiles root) print
   testIsEven
   testCountEven
+  print $ removeNegative2 [-1.0, 7.0]
