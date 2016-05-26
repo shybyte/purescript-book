@@ -4,7 +4,9 @@ import Control.Monad.Eff.Console
 import Control.Monad.Eff (Eff)
 import Data.Foldable (for_)
 import Data.Path (root)
-import FileOperations (removeNegative2, countEven, allFiles, isEven)
+import FileOperations (allFiles)
+import Arrays (removeNegative2)
+import Recursion (countEven, isEven)
 import Prelude (Unit, bind, ($), (<$>), (-), negate)
 
 
