@@ -7,7 +7,7 @@ import Data.Path (root)
 import FileOperations (allFiles)
 import Arrays (removeNegative2)
 import Recursion (countEven, isEven)
-import Prelude (Unit, bind, ($), (<$>), (-), negate)
+import Prelude (Unit, negate, ($), bind, (<$>))
 
 
 testIsEven :: forall eff. Eff (console :: CONSOLE | eff) Unit

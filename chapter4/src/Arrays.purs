@@ -1,7 +1,7 @@
 module Arrays where
 
 import Control.MonadPlus (guard)
-import Data.Array (concat, length, (..), filter, concatMap)
+import Data.Array ((..), filter, length, concatMap)
 import Data.Array.Unsafe (head)
 import Data.Foldable (product)
 import Prelude ((++), return, (==), (*), (/), (+), (-), ($), bind, map, (>),  (>=), (<$>), mod)
