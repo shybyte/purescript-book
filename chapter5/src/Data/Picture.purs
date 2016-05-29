@@ -2,7 +2,7 @@ module Data.Picture where
 
 import Data.Foldable (foldMap, foldl)
 import Data.Maybe (Maybe(Nothing, Just))
-import Prelude ((*), negate, (/), (+), (-), show, (++), map)
+import Prelude ((*), negate, (/), (+), (-), show, (++), map, class Show)
 
 data Point = Point
   { x :: Number
@@ -178,3 +178,11 @@ area (Rectangle _ w h) = w * h
 area (Clipped picture _ w h) = w * h
 area (Line _ _) = 0.0
 area (Text _ _) = 0.0
+
+
+-- 6.3 1. Exercise
+-- Use the showShape function from the previous chapter
+-- to define a Show instance for the Shape type.
+
+instance showShape' :: Show Shape where
+  show = showShape
