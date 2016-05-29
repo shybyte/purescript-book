@@ -1,22 +1,20 @@
-module Data.Hashable 
+module Data.Hashable
   ( HashCode()
   , hashCode
 
-  , Hashable
+  , class Hashable
   , hash
   , hashEqual
   ) where
 
-import Prelude 
-
-import Data.Maybe
-import Data.Tuple
-import Data.Either
-import Data.String
+import Prelude (class Semigroup, class Eq, class Show, (<>), (<<<), eq, (*), (+), (==), show, (++), mod)
+import Data.Maybe (Maybe(Just, Nothing))
+import Data.Tuple (Tuple(Tuple))
+import Data.Either (Either(Right, Left))
+import Data.String (toCharArray)
 import Data.Function (on)
 import Data.Foldable (foldMap)
-import Data.Monoid (Monoid)
-
+import Data.Monoid (class Monoid)
 import qualified Data.Char as C
 
 newtype HashCode = HashCode Int
