@@ -1,6 +1,6 @@
 module Data.Picture where
 
-import Data.Foldable (foldl)
+import Data.Foldable (foldMap, foldl)
 import Data.Maybe (Maybe(Nothing, Just))
 import Prelude ((*), negate, (/), (+), (-), show, (++), map)
 
@@ -18,6 +18,7 @@ data Shape
   | Rectangle Point Number Number
   | Line Point Point
   | Text Point String
+  | Clipped Picture Point Number Number
 
 showShape :: Shape -> String
 showShape (Circle c r) =
@@ -28,6 +29,12 @@ showShape (Line start end) =
   "Line [start: " ++ showPoint start ++ ", end: " ++ showPoint end ++ "]"
 showShape (Text loc text) =
   "Text [location: " ++ showPoint loc ++ ", text: " ++ show text ++ "]"
+showShape (Clipped picture c w h) =
+  "Clipped [center: " ++ showPoint c ++
+  ", width: " ++ show w ++
+  ", height: " ++ show h ++
+  ", picture: " ++ (foldMap showShape picture) ++
+  "]"
 
 type Picture = Array Shape
 
@@ -75,25 +82,28 @@ shapeBounds (Text (Point { x = x, y = y }) _) = Bounds
   , right:  x
   }
 
-intersection :: Bounds -> Bounds -> Bounds
-intersection (Bounds b1) (Bounds b2) = Bounds
+shapeBounds (Clipped picture center w h) =
+  bounds picture /\ shapeBounds (Rectangle center w h)
+
+union :: Bounds -> Bounds -> Bounds
+union (Bounds b1) (Bounds b2) = Bounds
   { top:    Math.min b1.top    b2.top
   , left:   Math.min b1.left   b2.left
   , bottom: Math.max b1.bottom b2.bottom
   , right:  Math.max b1.right  b2.right
   }
 
-infix 4 intersection as \/
+infix 4 union as \/
 
-union :: Bounds -> Bounds -> Bounds
-union (Bounds b1) (Bounds b2) = Bounds
+intersection :: Bounds -> Bounds -> Bounds
+intersection (Bounds b1) (Bounds b2) = Bounds
   { top:    Math.max b1.top    b2.top
   , left:   Math.max b1.left   b2.left
   , bottom: Math.min b1.bottom b2.bottom
   , right:  Math.min b1.right  b2.right
   }
 
-infix 4 union as /\
+infix 4 intersection as /\
 
 emptyBounds :: Bounds
 emptyBounds = Bounds
@@ -153,3 +163,18 @@ mean x y = (x + y) / 2.0
 extractText :: Shape -> Maybe String
 extractText (Text _ text) = Just text
 extractText _ = Nothing
+
+
+-- 5.16
+
+-- 1. Exercise
+-- Extend the vector graphics library with a new operation area
+-- which computes the area of a Shape.
+-- For the purposes of this exercise, the area of a piece of text is assumed to be zero.
+
+area ::  Shape -> Number
+area (Circle _ r) = Math.pi * r * r
+area (Rectangle _ w h) = w * h
+area (Clipped picture _ w h) = w * h
+area (Line _ _) = 0.0
+area (Text _ _) = 0.0
