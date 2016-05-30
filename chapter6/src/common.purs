@@ -2,14 +2,14 @@ module Common where
 
 import Data.Char as C
 import Data.Either (Either(Right, Left))
-import Data.Foldable (foldMap)
+import Data.Foldable (foldr, foldl, class Foldable, foldMap)
 import Data.Function (on)
 import Data.Generic (class Generic, gShow)
 import Data.Maybe (Maybe(Just, Nothing))
 import Data.Monoid (class Monoid)
 import Data.String (toCharArray)
 import Data.Tuple (Tuple(Tuple))
-import Prelude (class Semigroup, (&&), class Eq, class Show, (<>), (<<<), eq, (*), (+), (==), show, (++), mod)
+import Prelude (class Functor, class Semigroup, (&&), class Eq, class Show, (<>), (<<<), eq, (*), (+), (==), show, (++), mod, (<$>), map)
 
 
 -- 6.4 Common Type Classes
@@ -46,3 +46,20 @@ instance semigroupNonEmpty :: Semigroup (NonEmpty a) where
 instance showNonEmpty :: Show a => Show (NonEmpty a) where
   show (NonEmpty x xs) =
     "NonEmpty " ++ show x ++ " " ++ show xs
+
+
+-- 3. Exercise
+-- Write a Functor instance for NonEmpty
+
+instance functorNonEmpty :: Functor NonEmpty where
+  map a2b (NonEmpty a as) = NonEmpty (a2b a) (map a2b as)
+
+
+-- 4. Exercise
+-- Write a Foldable instance for NonEmpty.
+-- Hint: reuse the Foldable instance for arrays.
+
+instance foldableNonEmpty :: Foldable NonEmpty where
+  foldl bab b (NonEmpty a as) = foldl bab (bab b a)  as
+  foldr abb b (NonEmpty a as) = abb a (foldr abb b as)
+  foldMap am (NonEmpty a as) = am a ++ (foldMap am as)
