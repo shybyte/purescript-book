@@ -1,15 +1,8 @@
 module Common where
 
-import Data.Char as C
-import Data.Either (Either(Right, Left))
 import Data.Foldable (foldr, foldl, class Foldable, foldMap)
-import Data.Function (on)
+import Prelude (compare, Ordering(GT, LT, EQ), class Ord, class Functor, class Semigroup, (&&), class Eq, class Show, (<>), (<<<), eq, (*), (+), (==), show, (++), mod, (<$>), map)
 import Data.Generic (class Generic, gShow)
-import Data.Maybe (Maybe(Just, Nothing))
-import Data.Monoid (class Monoid)
-import Data.String (toCharArray)
-import Data.Tuple (Tuple(Tuple))
-import Prelude (class Functor, class Semigroup, (&&), class Eq, class Show, (<>), (<<<), eq, (*), (+), (==), show, (++), mod, (<$>), map)
 
 
 -- 6.4 Common Type Classes
@@ -63,3 +56,49 @@ instance foldableNonEmpty :: Foldable NonEmpty where
   foldl bab b (NonEmpty a as) = foldl bab (bab b a)  as
   foldr abb b (NonEmpty a as) = abb a (foldr abb b as)
   foldMap am (NonEmpty a as) = am a ++ (foldMap am as)
+
+
+-- 6.7
+
+-- 1. Exercise
+-- Write an Eq instance for the type NonEmpty a
+-- which reuses the instances for Eq a and Eq (Array a)
+
+instance eqNonEmpty :: Eq a => Eq (NonEmpty a) where
+  eq (NonEmpty a1 as1) (NonEmpty a2 as2) =
+    a1 == a2 && as1 == as2
+
+
+-- 2. Exercise
+-- Write an Ord instance for Extended a which reuses the Ord instance for a.
+
+data Extended a = Finite a | Infinite
+
+instance ordExtended :: Ord a => Eq (Extended a) where
+  eq a1 a2 = compareExtended a1 a2 == EQ
+
+instance eqExtended :: Ord a => Ord (Extended a) where
+  compare = compareExtended
+
+compareExtended :: forall a. (Ord a) => Extended a -> Extended a -> Ordering
+compareExtended Infinite Infinite = EQ
+compareExtended Infinite (Finite _) = LT
+compareExtended (Finite _) Infinite = GT
+compareExtended (Finite a1) (Finite a2) = compare a1 a2
+
+
+-- 3. Exercise
+
+data OneMore f a = OneMore a (f a)
+
+instance eqOneMoreInstance :: (Eq a, Eq (f a)) => Eq (OneMore f a) where
+  eq = eqOneMore
+
+eqOneMore :: forall a f. (Eq a, Eq (f a)) => OneMore f a -> OneMore f a -> Boolean
+eqOneMore (OneMore a1 as1) (OneMore a2 as2) =
+  a1 == a2 && as1 == as2
+
+instance foldableOneMore :: (Foldable f) => Foldable (OneMore f) where
+  foldl bab b (OneMore a as) = foldl bab (bab b a)  as
+  foldr abb b (OneMore a as) = abb a (foldr abb b as)
+  foldMap am (OneMore a as) = am a ++ (foldMap am as)
