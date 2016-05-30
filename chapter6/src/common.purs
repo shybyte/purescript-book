@@ -1,7 +1,7 @@
 module Common where
 
 import Data.Foldable (foldr, foldl, class Foldable, foldMap)
-import Prelude (compare, Ordering(GT, LT, EQ), class Ord, class Functor, class Semigroup, (&&), class Eq, class Show, (<>), (<<<), eq, (*), (+), (==), show, (++), mod, (<$>), map)
+import Prelude (class Eq, class Ord, class Functor, class Show, class Semigroup, Ordering(GT, LT, EQ), (++), (==), (&&), compare, map, show)
 import Data.Generic (class Generic, gShow)
 
 
