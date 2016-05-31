@@ -1,8 +1,8 @@
 module HashSolution where
 
-import Data.Hashable
-import Prelude
-import Data.Array
+import Data.Hashable (class Hashable, hash, hashEqual)
+import Prelude (class Eq, (>>>), mod, eq, (==), (&&), (/=))
+import Data.Array (length, nubBy)
 import Data.Function (on)
 
 
