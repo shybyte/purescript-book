@@ -98,6 +98,7 @@ eqOneMore :: forall a f. (Eq a, Eq (f a)) => OneMore f a -> OneMore f a -> Boole
 eqOneMore (OneMore a1 as1) (OneMore a2 as2) =
   a1 == a2 && as1 == as2
 
+-- works too:  instance foldableOneMore :: (Foldable (f a)) => Foldable (OneMore (f a)) where
 instance foldableOneMore :: (Foldable f) => Foldable (OneMore f) where
   foldl bab b (OneMore a as) = foldl bab (bab b a)  as
   foldr abb b (OneMore a as) = abb a (foldr abb b as)
