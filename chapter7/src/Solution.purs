@@ -34,7 +34,7 @@ fieldEmptyResult = validatePerson $ person "" "" (address "" "" "") []
 -- Left ("Field cannot be empty")
 
 
--- 7.9 Applicative Validation - Exercises
+-- 7.10 Regular Expression Validators - Exercises
 
 -- 1. Exercise
 -- Use a regular expression validator to ensure
