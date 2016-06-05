@@ -28,28 +28,28 @@ lengthIs field len value | S.length value /= len = invalid ["Field '" ++ field +
 lengthIs _     _   _     = pure unit
 
 phoneNumberRegex :: R.Regex
-phoneNumberRegex = 
-  R.regex 
-    "^\\d{3}-\\d{3}-\\d{4}$" 
+phoneNumberRegex =
+  R.regex
+    "^\\d{3}-\\d{3}-\\d{4}$"
     { unicode:    false
     , sticky:     false
     , multiline:  false
     , ignoreCase: false
-    , global:     false 
+    , global:     false
     }
 
 matches :: String -> R.Regex -> String -> V Errors Unit
 matches _     regex value | R.test regex value = pure unit
 matches field _     _     = invalid ["Field '" ++ field ++ "' did not match the required format"]
 
-validateAddress :: Address -> V Errors Address 
-validateAddress (Address o) = 
+validateAddress :: Address -> V Errors Address
+validateAddress (Address o) =
   address <$> (nonEmpty "Street" o.street *> pure o.street)
           <*> (nonEmpty "City"   o.city   *> pure o.city)
           <*> (lengthIs "State" 2 o.state *> pure o.state)
 
 validatePhoneNumber :: PhoneNumber -> V Errors PhoneNumber
-validatePhoneNumber (PhoneNumber o) = 
+validatePhoneNumber (PhoneNumber o) =
   phoneNumber <$> pure o."type"
               <*> (matches "Number" phoneNumberRegex o.number *> pure o.number)
 
