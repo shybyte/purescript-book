@@ -137,9 +137,10 @@ sequence2 tfa = traverse (\x -> x) tfa
 traverse2 :: forall a b f t. (Applicative f, Traversable t) => (a -> f b) -> t a -> f (t b)
 traverse2 a2fb ta =  sequence (a2fb <$> ta)
 
-  -- 2. Exercise
-  -- Modify the code to make the address field of the Person type optional using Data.Maybe.
-  -- Hint: Use traverse to validate a field of type Maybe a.
+
+-- 2. Exercise
+-- Modify the code to make the address field of the Person type optional using Data.Maybe.
+-- Hint: Use traverse to validate a field of type Maybe a.
 
 newtype Person3 = Person3
   { firstName :: String
