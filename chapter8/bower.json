@@ -23,6 +23,8 @@
     "purescript-foreign": "^0.7.0",
     "purescript-console": "~0.1.0",
     "purescript-lists": "0.7.10",
-    "purescript-control": "0.3.2"
+    "purescript-control": "0.3.2",
+    "purescript-random": "0.2.3",
+    "purescript-exceptions": "0.3.4"
   }
 }
