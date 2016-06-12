@@ -38,7 +38,7 @@ simulate' x0 v0 time = runPure (runST (simulate x0 v0 time))
 
 
 safeDivide :: forall eff. Int -> Int -> Eff (err :: EXCEPTION | eff) Int
-safeDivide _ 0 = throwException $ error "Expected a non-negative number"
+safeDivide _ 0 = throwException $ error "Only Chuck Norris can divide by zero"
 safeDivide a b = return $ a / b
 
 
