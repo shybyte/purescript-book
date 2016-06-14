@@ -1,22 +1,16 @@
 module Data.AddressBook.UI where
 
-import Prelude
-
-import DOM
-
-import Data.Maybe
-import Data.Either
-import Data.Foreign
-import Data.Foreign.Class
-import Data.AddressBook
-import Data.AddressBook.Validation
-import Data.Traversable (sequence)
-
-import Control.Bind
-
-import Control.Monad.Eff
-import Control.Monad.Eff.DOM
 import Control.Monad.Eff.Console
+import Data.AddressBook.Validation
+import Control.Monad.Eff (Eff, foreachE)
+import Control.Monad.Eff.DOM (addEventListener, body, setInnerHTML, querySelector, appendChild, addClass, setText, createElement, getValue)
+import DOM (DOM)
+import Data.AddressBook (Person, PhoneType(CellPhone, HomePhone, WorkPhone), phoneNumber, address, person)
+import Data.Either (Either(Right, Left))
+import Data.Foreign.Class (read)
+import Data.Maybe (Maybe(Just, Nothing))
+import Data.Traversable (sequence)
+import Prelude (Unit, unit, return, bind, ($), (<$>), (<*>), (++))
 
 valueOf :: forall eff. String -> Eff (dom :: DOM | eff) String
 valueOf sel = do
@@ -29,42 +23,76 @@ valueOf sel = do
         Right s -> s
         _ -> ""
 
-displayValidationErrors :: forall eff. Array String -> Eff (dom :: DOM | eff) Unit
-displayValidationErrors errs = do
-  alert <- createElement "div"
 
+getErrorText :: ValidationError -> String
+getErrorText (ValidationError t _) = t
+
+
+getErrorField :: ValidationError -> Field
+getErrorField (ValidationError _ f) = f
+
+allFields :: Array Field
+allFields =
+  [FirstNameField, LastNameField,
+  StreetField, CityField, StateField,
+  PhoneFields, PhoneField WorkPhone, PhoneField HomePhone, PhoneField CellPhone]
+
+displayValidationErrors :: forall eff. Errors -> Eff (dom :: DOM | eff) Unit
+displayValidationErrors errs = do
+  -- Remove old Validation Messages
+  foreachE allFields $ \field -> do
+    Just validationErrors <- querySelector $ toValidationErrorsSelector field
+    setInnerHTML "" validationErrors
+    return unit
+  -- Add new Validation Messages
   foreachE errs $ \err -> do
+    let field = getErrorField err
+    Just validationErrors <- querySelector $ toValidationErrorsSelector field
     div <- createElement "div"
-    setText err div
+    setText (getErrorText err) div
     addClass "alert" div
     addClass "alert-danger" div
 --  div <- createElement "div"
 --    >>= setText err
 --    >>= addClass "alert"
 --    >>= addClass "alert-danger"
-    div `appendChild` alert
+    div `appendChild` validationErrors
     return unit
-
-  Just validationErrors <- querySelector "#validationErrors"
-  alert `appendChild` validationErrors
-
   return unit
 
-validateControls :: forall eff. Eff (console :: CONSOLE, dom :: DOM | eff) (Either (Array String) Person)
+toValidationErrorsSelector :: Field -> String
+toValidationErrorsSelector field = (toSelector field) ++ " + .validationErrors"
+
+validateControls :: forall eff. Eff (console :: CONSOLE, dom :: DOM | eff) (Either (Array ValidationError) Person)
 validateControls = do
   log "Running validators"
 
-  p <- person <$> valueOf "#inputFirstName"
-              <*> valueOf "#inputLastName"
-              <*> (address <$> valueOf "#inputStreet"
-                           <*> valueOf "#inputCity"
-                           <*> valueOf "#inputState")
-              <*> sequence [ phoneNumber HomePhone <$> valueOf "#inputHomePhone"
-                           , phoneNumber CellPhone <$> valueOf "#inputCellPhone"
-                           , phoneNumber WorkPhone <$> valueOf "#inputWorkPhone"
+  p <- person <$> valueOf (toSelector FirstNameField)
+              <*> valueOf (toSelector LastNameField)
+              <*> (address <$> valueOf (toSelector StreetField)
+                           <*> valueOf (toSelector CityField)
+                           <*> valueOf (toSelector StateField))
+              <*> sequence [ phoneNumber HomePhone <$> valueOf (toSelector (PhoneField HomePhone))
+                           , phoneNumber CellPhone <$> valueOf (toSelector (PhoneField CellPhone))
+                           , phoneNumber WorkPhone <$> valueOf (toSelector (PhoneField WorkPhone))
                            ]
 
   return $ validatePerson' p
+
+toSelector :: Field -> String
+toSelector field =
+  case field of
+    FirstNameField -> "#inputFirstName"
+    LastNameField -> "#inputLastName"
+    StreetField -> "#inputStreet"
+    CityField -> "#inputCity"
+    StateField -> "#inputState"
+    PhoneFields -> "#phones"
+    (PhoneField HomePhone) -> "#inputHomePhone"
+    (PhoneField CellPhone) -> "#inputCellPhone"
+    (PhoneField WorkPhone) -> "#inputWorkPhone"
+    (PhoneField _) -> ""
+
 
 validateAndUpdateUI :: forall eff. Eff (console :: CONSOLE, dom :: DOM | eff) Unit
 validateAndUpdateUI = do
