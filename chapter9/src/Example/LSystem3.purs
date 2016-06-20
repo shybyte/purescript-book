@@ -1,4 +1,4 @@
-module Example.LSystem3 where
+module Example.LSystem2 where
 
 import Prelude (class Monad, bind, ($), return, (*), (+), (/), (-))
 import Data.Maybe.Unsafe (fromJust)
@@ -37,7 +37,7 @@ buildSentences init prod n = go init n
   go s n = go (concatMap prod s) (n - 1)
 
 
-data Alphabet = L | R | F Boolean
+data Alphabet = L | R | F | M
 
 type Sentence = Array Alphabet
 
@@ -57,13 +57,13 @@ main = do
 
   let
     initial :: Sentence
-    initial = [F false]
+    initial = [M]
 
     productions :: Alphabet -> Sentence
     productions L = [L]
     productions R = [R]
-    productions (F true)  = [F true, L, F false, L, F true, R, F false, R, F true, R, F false, R, F true, L, F false, L, F true]
-    productions (F false) = [F false, R, F true, R, F false, L, F true, L, F false, L, F true, L, F false, R, F true, R, F false]
+    productions F = [F, L, M, L, F, R, M, R, F, R, M, R, F, L, M, L, F]
+    productions M = [M, R, F, R, M, L, F, L, M, L, F, L, M, R, F, R, M]
 
     interpret :: State -> Alphabet -> Eff (canvas :: Canvas) State
     interpret state L = return $ state { theta = state.theta - Math.pi / 3.0 }
