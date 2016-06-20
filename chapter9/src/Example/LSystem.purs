@@ -37,7 +37,10 @@ buildSentences init prod n = go init n
   go s n = go (concatMap prod s) (n - 1)
 
 
-data Alphabet = L | R | F
+
+type Angle = Number
+
+data Alphabet = L Angle | R Angle | F
 
 type Sentence = Array Alphabet
 
@@ -48,6 +51,8 @@ type State =
   }
 
 
+defaultAngle :: Number
+defaultAngle = Math.pi / 3.0
 
 main :: Eff( canvas :: Canvas) State
 main = do
@@ -57,16 +62,15 @@ main = do
 
   let
     initial :: Sentence
-    initial = [F, R, R, F, R, R, F, R, R]
+    initial = [F, R (defaultAngle * 0.8), R (defaultAngle * 0.8), F, R (defaultAngle * 0.8), R (defaultAngle * 0.8), F, R (defaultAngle * 0.8), R (defaultAngle * 0.8)]
 
     productions :: Alphabet -> Sentence
-    productions L = [L]
-    productions R = [R]
-    productions F = [F, L, F, R, R, F, L, F]
+    productions F = [F, L (defaultAngle*0.8), F, R (defaultAngle*0.7), R (defaultAngle*1.1), F, L (defaultAngle*1.2), F]
+    productions x  = [x]
 
     interpret :: State -> Alphabet -> Eff (canvas :: Canvas) State
-    interpret state L = return $ state { theta = state.theta - Math.pi / 3.0 }
-    interpret state R = return $ state { theta = state.theta + Math.pi / 3.0 }
+    interpret state (L angle) = return $ state { theta = state.theta - angle }
+    interpret state (R angle) = return $ state { theta = state.theta + angle }
     interpret state F = do
       let x' = state.x + Math.cos state.theta * 1.5
           y' = state.y + Math.sin state.theta * 1.5
