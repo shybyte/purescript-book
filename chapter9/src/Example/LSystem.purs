@@ -49,7 +49,7 @@ type State =
 
 
 
-main :: Eff( canvas :: Canvas) State  
+main :: Eff( canvas :: Canvas) State
 main = do
   canvasMaybe <- getCanvasElementById "canvas"
   let canvas = fromJust canvasMaybe
@@ -80,6 +80,10 @@ main = do
   setFillStyle "#ff8800" ctx
 
   fillPath ctx $ do
+    setShadowOffsetX 10.0 ctx
+    setShadowOffsetY 10.0 ctx
+    setShadowBlur 5.0 ctx
+    setShadowColor "#aa4400" ctx
     moveTo ctx initialState.x initialState.y
     lsystem initial productions interpret 5 initialState
     closePath ctx
