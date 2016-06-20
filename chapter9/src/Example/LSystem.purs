@@ -49,7 +49,6 @@ main = do
     interpret state F = do
       let x' = state.x + Math.cos state.theta * 1.5
           y' = state.y + Math.sin state.theta * 1.5
-      moveTo ctx state.x state.y
       lineTo ctx x' y'
       return { x: x', y: y', theta: state.theta }
 
@@ -57,5 +56,14 @@ main = do
     initialState = { x: 120.0, y: 200.0, theta: 0.0 }
 
   setStrokeStyle "#000000" ctx
+  setFillStyle "#ff8800" ctx
 
-  strokePath ctx $ lsystem initial productions interpret 5 initialState
+  fillPath ctx $ do
+    moveTo ctx initialState.x initialState.y
+    lsystem initial productions interpret 5 initialState
+    closePath ctx
+
+  strokePath ctx $ do
+    moveTo ctx initialState.x initialState.y
+    lsystem initial productions interpret 5 initialState
+    closePath ctx
