@@ -1,4 +1,4 @@
-module Example.LSystem3 where
+module Example.LSystem2 where
 
 import Prelude (class Monad, bind, ($), return, (*), (+), (/), (-))
 import Data.Maybe.Unsafe (fromJust)

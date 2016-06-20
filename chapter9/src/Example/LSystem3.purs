@@ -1,11 +1,11 @@
-module Example.LSystem2 where
-
-import Prelude (class Monad, bind, ($), return, (*), (+), (/), (-))
-import Data.Maybe.Unsafe (fromJust)
-import Data.Array (concatMap, foldM)
+module Example.LSystem3 where
 
 import Control.Monad.Eff (Eff)
-import Graphics.Canvas hiding (translate)
+import Control.Monad.Eff.Random (RANDOM, randomRange)
+import Data.Array (concatMap, foldM)
+import Data.Maybe.Unsafe (fromJust)
+import Prelude (class Monad, bind, ($), return, (*), (+), negate, (/), (-))
+import Graphics.Canvas
 
 lsystem :: forall a m s. (Monad m) =>
                          Array a ->
@@ -49,7 +49,7 @@ type State =
 
 
 
-main :: Eff( canvas :: Canvas) State
+main :: Eff( canvas :: Canvas, random :: RANDOM) State
 main = do
   canvasMaybe <- getCanvasElementById "canvas"
   let canvas = fromJust canvasMaybe
@@ -65,12 +65,15 @@ main = do
     productions F = [F, L, M, L, F, R, M, R, F, R, M, R, F, L, M, L, F]
     productions M = [M, R, F, R, M, L, F, L, M, L, F, L, M, R, F, R, M]
 
-    interpret :: State -> Alphabet -> Eff (canvas :: Canvas) State
+    interpret :: State -> Alphabet -> Eff (canvas :: Canvas, random :: RANDOM) State
     interpret state L = return $ state { theta = state.theta - Math.pi / 3.0 }
     interpret state R = return $ state { theta = state.theta + Math.pi / 3.0 }
     interpret state _ = do
-      let x' = state.x + Math.cos state.theta * 1.5
-          y' = state.y + Math.sin state.theta * 1.5
+      randomAddX <- (randomRange (-1.0) 1.0)
+      randomAddY <- (randomRange (-1.0) 1.0)
+      randomAngleChange <- (randomRange 0.9 1.2)
+      let x' = state.x + (Math.cos state.theta * 1.5 * randomAngleChange) + randomAddX
+          y' = state.y + (Math.sin state.theta * 1.5 * randomAngleChange) + randomAddY
       lineTo ctx x' y'
       return { x: x', y: y', theta: state.theta }
 
