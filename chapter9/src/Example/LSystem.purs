@@ -1,12 +1,10 @@
 module Example.LSystem where
 
-import Prelude
-
-import Data.Maybe
+import Prelude (class Monad, bind, ($), return, (*), (+), (/), (-))
+import Data.Maybe.Unsafe (fromJust)
 import Data.Array (concatMap, foldM)
 
-import Control.Monad.Eff
-
+import Control.Monad.Eff (Eff)
 import Graphics.Canvas hiding (translate)
 
 lsystem :: forall a m s. (Monad m) =>
@@ -14,11 +12,30 @@ lsystem :: forall a m s. (Monad m) =>
                          (a -> Array a) ->
                          (s -> a -> m s) ->
                          Int ->
-                         s -> m s
-lsystem init prod interpret n state = go init n
+                         s ->
+                         m s
+lsystem init prod interpret n state =
+  interpretSentences (buildSentences init prod n) interpret state
+
+
+interpretSentences :: forall a m s. (Monad m) =>
+                         Array a ->
+                         (s -> a -> m s) ->
+                         s ->
+                         m s
+interpretSentences sentences interpret initialState = foldM interpret initialState sentences
+
+
+buildSentences :: forall a.
+                         Array a ->
+                         (a -> Array a) ->
+                         Int ->
+                         Array a
+buildSentences init prod n = go init n
   where
-  go s 0 = foldM interpret state s
+  go s 0 = s
   go s n = go (concatMap prod s) (n - 1)
+
 
 data Alphabet = L | R | F
 
@@ -30,8 +47,12 @@ type State =
   , theta :: Number
   }
 
+
+
+main :: Eff( canvas :: Canvas) State  
 main = do
-  Just canvas <- getCanvasElementById "canvas"
+  canvasMaybe <- getCanvasElementById "canvas"
+  let canvas = fromJust canvasMaybe
   ctx <- getContext2D canvas
 
   let
@@ -66,4 +87,3 @@ main = do
   strokePath ctx $ do
     moveTo ctx initialState.x initialState.y
     lsystem initial productions interpret 5 initialState
-    closePath ctx
