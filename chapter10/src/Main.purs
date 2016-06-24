@@ -2,6 +2,7 @@ module Main where
 
 import Prelude
 import Data.Maybe
+import Data.URI (encodeURIComponent)
 import Data.Either
 import Data.Foreign
 import Data.Foreign.Null
@@ -121,6 +122,7 @@ validateAndSaveEntry = do
 main :: forall eff. Eff (console :: CONSOLE, alert :: ALERT, dom :: DOM, storage :: STORAGE | eff) Unit
 main = do
   log "Loading data from local storage"
+  log (encodeURIComponent "123&=")
   loadSavedData
 
   log "Attaching event handlers"
