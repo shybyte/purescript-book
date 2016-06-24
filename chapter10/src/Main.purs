@@ -1,9 +1,7 @@
 module Main where
 
 import Prelude
-
 import Data.Maybe
-import Data.Array (length)
 import Data.Either
 import Data.Foreign
 import Data.Foreign.Null
@@ -12,14 +10,13 @@ import Data.JSON
 import Data.Traversable
 import Data.AddressBook
 import Data.AddressBook.UI
-
 import DOM
-
 import Control.Monad.Eff
 import Control.Monad.Eff.DOM
 import Control.Monad.Eff.Alert
 import Control.Monad.Eff.Storage
 import Control.Monad.Eff.Console
+import Data.Array (concatMap, length, range)
 
 newtype FormData = FormData
   { firstName  :: String
@@ -134,3 +131,6 @@ main = do
   addEventListener "click" validateAndSaveEntry saveButton
 
   return unit
+
+
+myRange = range
