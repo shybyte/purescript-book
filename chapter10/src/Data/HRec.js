@@ -1,7 +1,8 @@
 "use strict";
 
 // module Data.HRec
-var empty = {};
+
+exports.empty = {};
 
 exports.insert = function(key, value, rec) {
     var copy = {};
