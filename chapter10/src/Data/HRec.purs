@@ -57,3 +57,9 @@ foreign import lookupHelper :: forall a r. Fn4 r (a -> r) String (HRec a) r
 
 lookup2 :: forall a. String -> HRec a -> Maybe a
 lookup2 key rec= runFn4 lookupHelper Nothing (Just) key rec
+
+
+-- 10.14 Example: Homogeneous Records - 5.Exercise
+-- Write a version of the mapHRec function in which the mapping function receives
+-- the property label as an additional argument.
+foreign import mapHRec2 :: forall a b. Fn2 (Fn2 String a b) (HRec a) (HRec b)
