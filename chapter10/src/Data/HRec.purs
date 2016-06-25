@@ -26,4 +26,13 @@ instance functorHRec :: Functor HRec where
 
 -- 10.14 Example: Homogeneous Records - 2.Exercise
 
+-- Write a function union which calculates the union of two homogeneous records.
+-- If the two records share a label, the second record should take precedence.
+
 foreign import union :: forall a. Fn2 (HRec a) (HRec a) (HRec a)
+
+
+-- 3.Exercise
+-- Write a version of foldHRec which uses regular (curried) functions
+foldHRec2 :: forall a r. (r -> String -> a -> r) -> r -> HRec a -> r
+foldHRec2 f r rec  = runFn3 foldHRec (mkFn3 f) r rec
