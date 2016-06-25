@@ -149,3 +149,11 @@ divides = mkFn2 $ \n m -> m % n == 0.0
 confirmTest = do
   answer <- confirm "Hossa"
   log $ "Answer: " <> show answer
+
+
+localStorageTest = do
+  setItem "key" "value"
+  getItem "key"
+
+localStorageTest2 = do
+  removeItem "key"
