@@ -1,5 +1,5 @@
 module Data.HRec where
-    
+
 import Prelude
 
 import Data.Function
@@ -16,8 +16,14 @@ foreign import empty :: forall a. HRec a
 foreign import insert :: forall a. Fn3 String a (HRec a) (HRec a)
 
 foreign import mapHRec :: forall a b. Fn2 (a -> b) (HRec a) (HRec b)
-                                                                    
+
 foreign import foldHRec :: forall a r. Fn3 (Fn3 r String a r) r (HRec a) r
-                                          
+
+
 instance functorHRec :: Functor HRec where
   map f rec = runFn2 mapHRec f rec
+
+
+-- 10.14 Example: Homogeneous Records - 2.Exercise
+
+foreign import union :: forall a. Fn2 (HRec a) (HRec a) (HRec a)

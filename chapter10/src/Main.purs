@@ -1,8 +1,10 @@
 module Main where
 
 import Prelude
+import Math ((%))
+import Data.Function
 import Data.Maybe
-import Data.URI (encodeURIComponent)
+import Data.URI (encodeURIComponent, unsafeHead)
 import Data.Either
 import Data.Foreign
 import Data.Foreign.Null
@@ -123,6 +125,9 @@ main :: forall eff. Eff (console :: CONSOLE, alert :: ALERT, dom :: DOM, storage
 main = do
   log "Loading data from local storage"
   log (encodeURIComponent "123&=")
+  -- let h = unsafeHead []
+  let d = runFn2 divides 2.0 10.0
+  log $ "runFn2 divides 2.0 10.0 = " <> show d
   loadSavedData
 
   log "Attaching event handlers"
@@ -136,3 +141,7 @@ main = do
 
 
 myRange = range
+
+-- 10.13 Functions of Multiple Arguments
+divides :: Fn2 Number Number Boolean
+divides = mkFn2 $ \n m -> m % n == 0.0

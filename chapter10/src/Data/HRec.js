@@ -34,3 +34,18 @@ exports.foldHRec = function(f, r, rec) {
     }
     return acc;
 };
+
+exports.union = function(rec1, rec2) {
+    var copy = {};
+    for (var k in rec1) {
+        if (rec1.hasOwnProperty(k)) {
+            copy[k] = rec1[k];
+        }
+    }
+    for (var k in rec2) {
+        if (rec2.hasOwnProperty(k)) {
+            copy[k] = rec2[k];
+        }
+    }
+    return copy;
+};
