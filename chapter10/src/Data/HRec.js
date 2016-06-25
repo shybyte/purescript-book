@@ -49,3 +49,12 @@ exports.union = function(rec1, rec2) {
     }
     return copy;
 };
+
+
+exports.lookupHelper = function(nothing, just, key, rec) {
+    if (rec.hasOwnProperty(key)) {
+      return just(rec[key]);
+    } else {
+      return nothing;
+    }
+};

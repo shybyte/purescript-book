@@ -1,8 +1,9 @@
 module Data.HRec where
 
 import Prelude
-
 import Data.Function
+import Data.Maybe
+import Data.Tuple (lookup)
 
 foreign import data HRec :: * -> *
 
@@ -32,7 +33,27 @@ instance functorHRec :: Functor HRec where
 foreign import union :: forall a. Fn2 (HRec a) (HRec a) (HRec a)
 
 
--- 3.Exercise
+-- 10.14 Example: Homogeneous Records - 3.Exercise
 -- Write a version of foldHRec which uses regular (curried) functions
 foldHRec2 :: forall a r. (r -> String -> a -> r) -> r -> HRec a -> r
 foldHRec2 f r rec  = runFn3 foldHRec (mkFn3 f) r rec
+
+
+-- 10.14 Example: Homogeneous Records - 4.Exercise
+-- Write a function lookup which looks up a key in a homogeneous record.
+
+lookup :: forall a. String -> HRec a -> Maybe a
+lookup needle rec = foldHRec2 foldF Nothing rec
+  where
+  foldF :: (Maybe a) -> String -> a -> (Maybe a)
+  foldF Nothing key value = if (key == needle) then (Just value) else Nothing
+  foldF foundJustValue@(Just _) _ _ = foundJustValue
+
+-- Write two versions of this function.
+-- The first version should use the foldHRec function.
+-- The second version should be defined as a foreign function
+
+foreign import lookupHelper :: forall a r. Fn4 r (a -> r) String (HRec a) r
+
+lookup2 :: forall a. String -> HRec a -> Maybe a
+lookup2 key rec= runFn4 lookupHelper Nothing (Just) key rec
