@@ -118,6 +118,9 @@ loadSavedData :: forall eff. Eff (console :: CONSOLE, alert :: ALERT, dom :: DOM
 loadSavedData = do
   item :: Foreign <- getItem "person"
 
+  -- 10.19 Serializing Address Book Entries - 3.Exercise
+  -- Convince yourself that the implementation of savedData should type-check
+  -- and write down the inferred types of each subexpression in the computation.
   let
     savedData :: F (Maybe FormData)
     savedData = do
