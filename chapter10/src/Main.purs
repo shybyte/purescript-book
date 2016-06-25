@@ -157,3 +157,15 @@ localStorageTest = do
 
 localStorageTest2 = do
   removeItem "key"
+
+
+-- 10.19 Serializing Address Book Entries -  1.Exercise
+-- Use readJSON to parse a JSON document representing a two-dimensional JavaScript array of integers,
+-- such as [[1, 2, 3], [4, 5], [6]] .
+
+testReadJson = do
+  log $ show $  readJSON "[[1, 2, 3], [4, 5], [6]]" :: F (Array (Array Int))
+  -- What if the elements are allowed be null?
+  log $ show $ map (\el -> map runNull el) <$> readJSON "[[1, 2, 3], [4, null], [6]]" :: F (Array (Array (Null Int)))
+  -- What if the arrays themselves are allowed to be null?
+  log $ show $ map runNull <$> readJSON "[[1, 2, 3], [4], null]" :: F (Array (Null (Array Int)))
