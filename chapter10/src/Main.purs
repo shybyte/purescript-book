@@ -33,6 +33,10 @@ newtype FormData = FormData
   , cellPhone  :: String
   }
 
+
+-- class IsForeign a where
+--   read :: Foreign -> F a
+
 instance formDataIsForeign :: IsForeign FormData where
   read value = do
     firstName   <- readProp "firstName" value
@@ -56,6 +60,35 @@ instance formDataIsForeign :: IsForeign FormData where
       , homePhone  : homePhone
       , cellPhone  : cellPhone
       }
+
+
+-- 10.19 Serializing Address Book Entries - 2.Exercise
+-- Rewrite the formDataIsForeign type class instance
+-- to use the applicative combinators <$> and <*> .
+
+createFormData :: String -> String -> String -> String -> String -> String -> String -> FormData
+createFormData firstName lastName street city state homePhone cellPhone = FormData {
+    firstName:  firstName
+  , lastName:  lastName
+  , street     : street
+  , city       : city
+  , state      : state
+
+  , homePhone  : homePhone
+  , cellPhone  : cellPhone
+}
+
+-- class IsForeign a where
+--   read :: Foreign -> F a
+instance formData2IsForeign :: IsForeign FormData where
+  read value =
+    createFormData <$> readProp "firstName" value
+    <*> readProp "lastName" value
+    <*> readProp "street" value
+    <*> readProp "city" value
+    <*> readProp "state" value
+    <*> readProp "homePhone" value
+    <*> readProp "cellPhone" value
 
 toFormData :: Person -> FormData
 toFormData (Person p@{ address = Address a

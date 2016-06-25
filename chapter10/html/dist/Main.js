@@ -1915,7 +1915,7 @@ var PS = {};
                   Control_Monad_Eff_DOM.setValue(value)(v.value0)();
                   return Prelude.unit;
               };
-              throw new Error("Failed pattern match at Main line 79, column 24 - line 84, column 1: " + [ v.constructor.name ]);
+              throw new Error("Failed pattern match at Main line 111, column 24 - line 116, column 1: " + [ v.constructor.name ]);
           };
       };
   };
@@ -1931,7 +1931,7 @@ var PS = {};
               cellPhone: (v.phones[1]).number
           };
       };
-      throw new Error("Failed pattern match at Main line 61, column 1 - line 78, column 1: " + [ v.constructor.name ]);
+      throw new Error("Failed pattern match at Main line 93, column 1 - line 110, column 1: " + [ v.constructor.name ]);
   };
   var validateAndSaveEntry = function __do() {
       Control_Monad_Eff_Console.log("Running validators")();
@@ -1946,7 +1946,7 @@ var PS = {};
                   return Control_Monad_Eff_Alert.alert("Saved")();
               };
           };
-          throw new Error("Failed pattern match at Main line 116, column 3 - line 122, column 3: " + [ v.constructor.name ]);
+          throw new Error("Failed pattern match at Main line 148, column 3 - line 154, column 3: " + [ v.constructor.name ]);
       })()();
       return Prelude.unit;
   };
@@ -1988,10 +1988,39 @@ var PS = {};
           });
       });
   });
+  var divides = function (n, m) {
+      return $$Math["%"](m)(n) === 0.0;
+  };
+  var createFormData = function (firstName) {
+      return function (lastName) {
+          return function (street) {
+              return function (city) {
+                  return function (state) {
+                      return function (homePhone) {
+                          return function (cellPhone) {
+                              return {
+                                  firstName: firstName, 
+                                  lastName: lastName, 
+                                  street: street, 
+                                  city: city, 
+                                  state: state, 
+                                  homePhone: homePhone, 
+                                  cellPhone: cellPhone
+                              };
+                          };
+                      };
+                  };
+              };
+          };
+      };
+  };
+  var formData2IsForeign = new Data_Foreign_Class.IsForeign(function (value) {
+      return Prelude["<*>"](Data_Either.applyEither)(Prelude["<*>"](Data_Either.applyEither)(Prelude["<*>"](Data_Either.applyEither)(Prelude["<*>"](Data_Either.applyEither)(Prelude["<*>"](Data_Either.applyEither)(Prelude["<*>"](Data_Either.applyEither)(Prelude["<$>"](Data_Either.functorEither)(createFormData)(Data_Foreign_Class.readProp(Data_Foreign_Class.stringIsForeign)(Data_Foreign_Index.indexString)("firstName")(value)))(Data_Foreign_Class.readProp(Data_Foreign_Class.stringIsForeign)(Data_Foreign_Index.indexString)("lastName")(value)))(Data_Foreign_Class.readProp(Data_Foreign_Class.stringIsForeign)(Data_Foreign_Index.indexString)("street")(value)))(Data_Foreign_Class.readProp(Data_Foreign_Class.stringIsForeign)(Data_Foreign_Index.indexString)("city")(value)))(Data_Foreign_Class.readProp(Data_Foreign_Class.stringIsForeign)(Data_Foreign_Index.indexString)("state")(value)))(Data_Foreign_Class.readProp(Data_Foreign_Class.stringIsForeign)(Data_Foreign_Index.indexString)("homePhone")(value)))(Data_Foreign_Class.readProp(Data_Foreign_Class.stringIsForeign)(Data_Foreign_Index.indexString)("cellPhone")(value));
+  });
   var loadSavedData = function __do() {
       var v = Control_Monad_Eff_Storage.getItem("person")();
       var savedData = Prelude.bind(Data_Either.bindEither)(Data_Foreign_Class.read(Data_Foreign_Class.nullIsForeign(Data_Foreign_Class.stringIsForeign))(v))(function (v1) {
-          return Data_Traversable.traverse(Data_Traversable.traversableMaybe)(Data_Either.applicativeEither)(Data_Foreign_Class.readJSON(formDataIsForeign))(Data_Foreign_Null.runNull(v1));
+          return Data_Traversable.traverse(Data_Traversable.traversableMaybe)(Data_Either.applicativeEither)(Data_Foreign_Class.readJSON(formData2IsForeign))(Data_Foreign_Null.runNull(v1));
       });
       if (savedData instanceof Data_Either.Left) {
           return Control_Monad_Eff_Alert.alert("Unable to read saved form data: " + Prelude.show(Data_Foreign.showForeignError)(savedData.value0))();
@@ -2009,10 +2038,7 @@ var PS = {};
           updateForm("#inputCellPhone")(savedData.value0.value0.cellPhone)();
           return Prelude.unit;
       };
-      throw new Error("Failed pattern match at Main line 94, column 3 - line 110, column 1: " + [ savedData.constructor.name ]);
-  };
-  var divides = function (n, m) {
-      return $$Math["%"](m)(n) === 0.0;
+      throw new Error("Failed pattern match at Main line 126, column 3 - line 142, column 1: " + [ savedData.constructor.name ]);
   };
   var main = function __do() {
       Control_Monad_Eff_Console.log("Loading data from local storage")();
@@ -2027,7 +2053,7 @@ var PS = {};
           Control_Monad_Eff_DOM.addEventListener("click")(validateAndSaveEntry)(v.value0)();
           return Prelude.unit;
       };
-      throw new Error("Failed pattern match at Main line 125, column 8 - line 143, column 1: " + [ v.constructor.name ]);
+      throw new Error("Failed pattern match at Main line 157, column 8 - line 175, column 1: " + [ v.constructor.name ]);
   };
   var confirmTest = function __do() {
       var v = Control_Monad_Eff_Alert.confirm("Hossa")();
@@ -2045,6 +2071,8 @@ var PS = {};
   exports["loadSavedData"] = loadSavedData;
   exports["updateForm"] = updateForm;
   exports["toFormData"] = toFormData;
+  exports["createFormData"] = createFormData;
   exports["formDataIsForeign"] = formDataIsForeign;
+  exports["formData2IsForeign"] = formData2IsForeign;
 })(PS["Main"] = PS["Main"] || {});
 PS["Main"].main();
