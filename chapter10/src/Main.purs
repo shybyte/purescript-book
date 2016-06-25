@@ -1,10 +1,8 @@
 module Main where
 
 import Prelude
-import Math ((%))
 import Data.Function
 import Data.Maybe
-import Data.URI (encodeURIComponent, unsafeHead)
 import Data.Either
 import Data.Foreign
 import Data.Foreign.Null
@@ -20,6 +18,8 @@ import Control.Monad.Eff.Alert
 import Control.Monad.Eff.Storage
 import Control.Monad.Eff.Console
 import Data.Array (concatMap, length, range)
+import Data.URI (encodeURIComponent, unsafeHead)
+import Math ((%))
 
 newtype FormData = FormData
   { firstName  :: String
@@ -116,13 +116,17 @@ updateForm sel value = do
 
 loadSavedData :: forall eff. Eff (console :: CONSOLE, alert :: ALERT, dom :: DOM, storage :: STORAGE | eff) Unit
 loadSavedData = do
-  item <- getItem "person"
+  item :: Foreign <- getItem "person"
 
   let
     savedData :: F (Maybe FormData)
     savedData = do
-      jsonOrNull <- read item
-      traverse readJSON (runNull jsonOrNull)
+      let readItem = (read item) :: F (Null String)
+      jsonOrNull :: Null String <- readItem
+      let x = runNull jsonOrNull :: Maybe String
+      -- traverse :: forall a b f. (Applicative f) => (a -> f b) -> t a -> f (t b)
+      -- traverse :: forall a b.(String -> F FormData) -> Maybe String -> F (Maybe FormData)
+      traverse readJSON x
 
   case savedData of
     Left err -> alert $ "Unable to read saved form data: " ++ show err
