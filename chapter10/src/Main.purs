@@ -145,3 +145,7 @@ myRange = range
 -- 10.13 Functions of Multiple Arguments
 divides :: Fn2 Number Number Boolean
 divides = mkFn2 $ \n m -> m % n == 0.0
+
+confirmTest = do
+  answer <- confirm "Hossa"
+  log $ "Answer: " <> show answer

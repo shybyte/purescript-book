@@ -8,3 +8,9 @@ exports.alert = function(msg) {
         return {};
     };
 };
+
+exports.confirm = function(msg) {
+    return function() {
+        return window.confirm(msg);
+    };
+};

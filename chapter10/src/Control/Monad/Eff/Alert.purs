@@ -7,3 +7,7 @@ import Control.Monad.Eff
 foreign import data ALERT :: !
 
 foreign import alert :: forall eff. String -> Eff (alert :: ALERT | eff) Unit
+
+foreign import data CONFIRM :: !
+
+foreign import confirm :: forall eff. String -> Eff (alert :: CONFIRM | eff) Boolean
