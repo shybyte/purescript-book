@@ -1946,7 +1946,7 @@ var PS = {};
                   return Control_Monad_Eff_Alert.alert("Saved")();
               };
           };
-          throw new Error("Failed pattern match at Main line 153, column 3 - line 159, column 3: " + [ v.constructor.name ]);
+          throw new Error("Failed pattern match at Main line 156, column 3 - line 162, column 3: " + [ v.constructor.name ]);
       })()();
       return Prelude.unit;
   };
@@ -2042,7 +2042,7 @@ var PS = {};
           updateForm("#inputCellPhone")(savedData.value0.value0.cellPhone)();
           return Prelude.unit;
       };
-      throw new Error("Failed pattern match at Main line 131, column 3 - line 147, column 1: " + [ savedData.constructor.name ]);
+      throw new Error("Failed pattern match at Main line 134, column 3 - line 150, column 1: " + [ savedData.constructor.name ]);
   };
   var main = function __do() {
       Control_Monad_Eff_Console.log("Loading data from local storage")();
@@ -2057,7 +2057,7 @@ var PS = {};
           Control_Monad_Eff_DOM.addEventListener("click")(validateAndSaveEntry)(v.value0)();
           return Prelude.unit;
       };
-      throw new Error("Failed pattern match at Main line 162, column 8 - line 180, column 1: " + [ v.constructor.name ]);
+      throw new Error("Failed pattern match at Main line 165, column 8 - line 183, column 1: " + [ v.constructor.name ]);
   };
   var confirmTest = function __do() {
       var v = Control_Monad_Eff_Alert.confirm("Hossa")();
